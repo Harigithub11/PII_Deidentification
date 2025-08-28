@@ -1,0 +1,107 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./logs:/app/logs
+      - ./config:/app/config
+    environment:
+      - DATABASE_URL=sqlite:///./data/pii_system.db
+      - MODEL_CACHE_DIR=/app/models/cache
+      - ENABLE_GPU=false
+    depends_on:
+      - airflow-webserver
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    restart: unless-stopped
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+
+  airflow-webserver:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    command: airflow webserver
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./orchestration:/app/orchestration
+      - ./data:/app/data
+      - ./logs/airflow:/app/logs
+      - ./config:/app/config
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:///./data/airflow.db
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__FERNET_KEY=your-fernet-key-here
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  airflow-scheduler:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    command: airflow scheduler
+    volumes:
+      - ./orchestration:/app/orchestration
+      - ./data:/app/data
+      - ./logs/airflow:/app/logs
+      - ./config:/app/config
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:///./data/airflow.db
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__FERNET_KEY=your-fernet-key-here
+    depends_on:
+      - airflow-webserver
+    restart: unless-stopped
+
+  # Optional: PostgreSQL for production use
+  # postgres:
+  #   image: postgres:15
+  #   environment:
+  #     POSTGRES_DB: pii_system
+  #     POSTGRES_USER: pii_user
+  #     POSTGRES_PASSWORD: pii_password
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   ports:
+  #     - "5432:5432"
+  #   restart: unless-stopped
+
+  # Optional: Redis for Celery backend
+  # redis:
+  #   image: redis:7-alpine
+  #   ports:
+  #     - "6379:6379"
+  #   restart: unless-stopped
+
+volumes:
+  data:
+  models:
+  logs:
+  # postgres_data:  # Uncomment for PostgreSQL
