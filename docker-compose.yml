@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  database:
+    image: postgres:15-alpine
+    container_name: deidentify-db
+    environment:
+      POSTGRES_DB: deidentify_db
+      POSTGRES_USER: deidentify_user
+      POSTGRES_PASSWORD: secure_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+    networks:
+      - deidentify-network
+    restart: unless-stopped
+
+  # Redis for job queue
+  redis:
+    image: redis:7-alpine
+    container_name: deidentify-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - deidentify-network
+    restart: unless-stopped
+
+  # Main Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: deidentify-app
+    environment:
+      - DATABASE_URL=postgresql://deidentify_user:secure_password@database:5432/deidentify_db
+      - REDIS_URL=redis://redis:6379/0
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./config:/app/config
+    depends_on:
+      - database
+      - redis
+    networks:
+      - deidentify-network
+    restart: unless-stopped
+
+  # Prefect Server (Workflow Management)
+  prefect-server:
+    image: prefecthq/prefect:2-python3.10
+    container_name: deidentify-prefect
+    environment:
+      - PREFECT_SERVER_API_HOST=0.0.0.0
+      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://deidentify_user:secure_password@database:5432/deidentify_db
+    ports:
+      - "4200:4200"
+    command: prefect server start --host 0.0.0.0
+    depends_on:
+      - database
+    networks:
+      - deidentify-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  deidentify-network:
+    driver: bridge

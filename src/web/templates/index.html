@@ -1,0 +1,208 @@
+{% extends "base.html" %}
+
+{% block title %}{{ app_name }} - Document De-identification{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <!-- Hero Section -->
+            <div class="jumbotron bg-light p-5 rounded-3 mb-4">
+                <div class="row align-items-center">
+                    <div class="col-md-8">
+                        <h1 class="display-5 fw-bold text-primary">
+                            <i class="bi bi-shield-check me-3"></i>
+                            AI-Powered Document De-identification
+                        </h1>
+                        <p class="lead">
+                            Automatically detect and redact personally identifiable information (PII) 
+                            from your documents with enterprise-grade privacy and compliance.
+                        </p>
+                        <div class="d-flex gap-2">
+                            <span class="badge bg-success">HIPAA Compliant</span>
+                            <span class="badge bg-success">GDPR Ready</span>
+                            <span class="badge bg-success">Self-Hosted</span>
+                            <span class="badge bg-success">Open Source</span>
+                        </div>
+                    </div>
+                    <div class="col-md-4 text-center">
+                        <i class="bi bi-file-earmark-lock display-1 text-primary"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Upload Section -->
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-cloud-upload me-2"></i>
+                        Upload Documents
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <!-- File Upload Area -->
+                    <div id="upload-area" class="border-2 border-dashed border-primary rounded p-5 text-center mb-3">
+                        <i class="bi bi-cloud-arrow-up display-3 text-primary mb-3"></i>
+                        <h5>Drag & Drop Files Here</h5>
+                        <p class="text-muted">Or click to select files</p>
+                        <input type="file" id="file-input" multiple accept=".pdf,.jpg,.jpeg,.png,.tiff,.txt" style="display: none;">
+                        <button type="button" class="btn btn-primary" onclick="document.getElementById('file-input').click()">
+                            <i class="bi bi-folder2-open me-2"></i>Select Files
+                        </button>
+                    </div>
+
+                    <!-- Upload Progress -->
+                    <div id="upload-progress" style="display: none;">
+                        <div class="progress mb-3">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                 role="progressbar" style="width: 0%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <small class="text-muted" id="upload-status">Preparing upload...</small>
+                            <small class="text-muted" id="upload-percentage">0%</small>
+                        </div>
+                    </div>
+
+                    <!-- File List -->
+                    <div id="file-list" class="mb-3" style="display: none;">
+                        <h6>Selected Files:</h6>
+                        <div class="list-group" id="file-items">
+                        </div>
+                    </div>
+
+                    <!-- Processing Options -->
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label for="policy-select" class="form-label">Privacy Policy:</label>
+                            <select class="form-select" id="policy-select">
+                                <option value="hipaa">HIPAA Compliant</option>
+                                <option value="gdpr">GDPR Compliant</option>
+                                <option value="pci">PCI DSS</option>
+                                <option value="custom">Custom Policy</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="redaction-method" class="form-label">Redaction Method:</label>
+                            <select class="form-select" id="redaction-method">
+                                <option value="mask">Mask (████)</option>
+                                <option value="replace">Replace ([REDACTED])</option>
+                                <option value="delete">Delete</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary" id="clear-files" disabled>
+                        <i class="bi bi-trash me-2"></i>Clear Files
+                    </button>
+                    <button type="button" class="btn btn-success" id="start-processing" disabled>
+                        <i class="bi bi-play-circle me-2"></i>Start Processing
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Panel -->
+        <div class="col-lg-4">
+            <!-- System Status -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-info text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-activity me-2"></i>System Status
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="status-indicator bg-success rounded-circle me-2"></div>
+                        <span class="small">Database</span>
+                        <span class="ms-auto badge bg-success">Online</span>
+                    </div>
+                    <div class="d-flex align-items-center mb-2">
+                        <div class="status-indicator bg-success rounded-circle me-2"></div>
+                        <span class="small">OCR Service</span>
+                        <span class="ms-auto badge bg-success">Ready</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="status-indicator bg-success rounded-circle me-2"></div>
+                        <span class="small">PII Detection</span>
+                        <span class="ms-auto badge bg-success">Ready</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h6 class="card-title mb-0">
+                        <i class="bi bi-clock-history me-2"></i>Recent Activity
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <div id="recent-activity">
+                        <p class="text-muted text-center">No recent activity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Processing Results Section -->
+    <div class="row mt-4" id="results-section" style="display: none;">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">
+                        <i class="bi bi-check-circle me-2"></i>Processing Results
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div id="processing-results">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Processing Modal -->
+<div class="modal fade" id="processing-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    <i class="bi bi-gear-fill me-2"></i>Processing Documents
+                </h5>
+            </div>
+            <div class="modal-body">
+                <div class="text-center">
+                    <div class="spinner-border text-primary mb-3" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <h6 id="processing-status">Starting document processing...</h6>
+                    <div class="progress mt-3">
+                        <div class="progress-bar" id="processing-progress" role="progressbar" style="width: 0%"></div>
+                    </div>
+                    <small class="text-muted mt-2 d-block" id="processing-details">Please wait...</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+// Initialize the upload interface
+document.addEventListener('DOMContentLoaded', function() {
+    initializeUpload();
+    loadSystemStatus();
+    loadRecentActivity();
+});
+</script>
+{% endblock %}
