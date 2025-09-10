@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Model Installation Script for PII De-identification System
 
@@ -309,13 +310,13 @@ def main():
         print("\n" + "=" * 60)
         print("Installation Summary:")
         print("=" * 60)
-        print(f"✓ spaCy Models: {', '.join(summary['spacy_models'])}")
-        print(f"✓ Transformer Models: {', '.join(summary['transformer_models'])}")
-        print(f"✓ YOLO Models: {', '.join(summary['yolo_models'])}")
+        print(f"[OK] spaCy Models: {', '.join(summary['spacy_models'])}")
+        print(f"[OK] Transformer Models: {', '.join(summary['transformer_models'])}")
+        print(f"[OK] YOLO Models: {', '.join(summary['yolo_models'])}")
         print("\nAll models installed successfully!")
         
     except Exception as e:
-        print(f"\n❌ Installation failed: {e}")
+        print(f"\n[ERROR] Installation failed: {e}")
         print("Please check the error messages above and try again.")
         sys.exit(1)
 

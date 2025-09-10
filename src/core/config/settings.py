@@ -7,7 +7,8 @@ This module provides centralized configuration management using Pydantic setting
 import os
 from pathlib import Path
 from typing import List, Optional, Union
-from pydantic import BaseSettings, Field, validator
+from pydantic import Field, field_validator
+from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
@@ -68,6 +69,43 @@ class Settings(BaseSettings):
         env="ALLOWED_FILE_TYPES"
     )
     
+    # Authentication & Authorization
+    access_token_expire_minutes: int = Field(default=30, env="ACCESS_TOKEN_EXPIRE_MINUTES")
+    refresh_token_expire_days: int = Field(default=7, env="REFRESH_TOKEN_EXPIRE_DAYS")
+    password_reset_expire_hours: int = Field(default=1, env="PASSWORD_RESET_EXPIRE_HOURS")
+    jwt_algorithm: str = Field(default="HS256", env="JWT_ALGORITHM")
+    initial_admin_email: Optional[str] = Field(default=None, env="INITIAL_ADMIN_EMAIL")
+    
+    # Rate Limiting
+    rate_limit_requests_per_minute: int = Field(default=60, env="RATE_LIMIT_REQUESTS_PER_MINUTE")
+    rate_limit_burst_requests: int = Field(default=10, env="RATE_LIMIT_BURST_REQUESTS")
+    upload_rate_limit_per_minute: int = Field(default=5, env="UPLOAD_RATE_LIMIT_PER_MINUTE")
+    
+    # Security Headers
+    enable_security_headers: bool = Field(default=True, env="ENABLE_SECURITY_HEADERS")
+    enable_hsts: bool = Field(default=True, env="ENABLE_HSTS")
+    hsts_max_age: int = Field(default=31536000, env="HSTS_MAX_AGE")  # 1 year
+    
+    # IP Whitelist for Admin
+    admin_ip_whitelist: List[str] = Field(
+        default=["127.0.0.1", "::1"],
+        env="ADMIN_IP_WHITELIST"
+    )
+    
+    # Session Security
+    secure_cookies: bool = Field(default=True, env="SECURE_COOKIES")
+    session_timeout_minutes: int = Field(default=60, env="SESSION_TIMEOUT_MINUTES")
+    
+    # Audit & Compliance
+    enable_audit_logging: bool = Field(default=True, env="ENABLE_AUDIT_LOGGING")
+    audit_log_retention_days: int = Field(default=90, env="AUDIT_LOG_RETENTION_DAYS")
+    enable_request_logging: bool = Field(default=True, env="ENABLE_REQUEST_LOGGING")
+    
+    # Data Protection
+    enable_pii_encryption: bool = Field(default=True, env="ENABLE_PII_ENCRYPTION")
+    enable_data_masking: bool = Field(default=True, env="ENABLE_DATA_MASKING")
+    data_retention_days: int = Field(default=30, env="DATA_RETENTION_DAYS")
+    
     # Processing Configuration
     max_concurrent_jobs: int = Field(default=2, env="MAX_CONCURRENT_JOBS")
     job_timeout_minutes: int = Field(default=30, env="JOB_TIMEOUT_MINUTES")
@@ -118,14 +156,16 @@ class Settings(BaseSettings):
     enable_swagger_ui: bool = Field(default=True, env="ENABLE_SWAGGER_UI")
     enable_reload: bool = Field(default=True, env="ENABLE_RELOAD")
     
-    @validator('model_device')
+    @field_validator('model_device')
+    @classmethod
     def validate_model_device(cls, v):
         """Validate model device setting."""
         if v not in ['cpu', 'cuda', 'mps']:
             raise ValueError('model_device must be one of: cpu, cuda, mps')
         return v
     
-    @validator('max_gpu_memory_mb')
+    @field_validator('max_gpu_memory_mb')
+    @classmethod
     def validate_gpu_memory(cls, v):
         """Validate GPU memory setting."""
         if v <= 0:
@@ -134,7 +174,8 @@ class Settings(BaseSettings):
             raise ValueError('max_gpu_memory_mb cannot exceed 32000')
         return v
     
-    @validator('allowed_file_types')
+    @field_validator('allowed_file_types')
+    @classmethod
     def validate_file_types(cls, v):
         """Validate allowed file types."""
         valid_types = ['pdf', 'png', 'jpg', 'jpeg', 'tiff', 'tif', 'bmp', 'gif']
@@ -143,10 +184,11 @@ class Settings(BaseSettings):
                 raise ValueError(f'Invalid file type: {file_type}')
         return [ft.lower() for ft in v]
     
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
-        case_sensitive = False
+    model_config = {
+        "env_file": ".env",
+        "env_file_encoding": "utf-8",
+        "case_sensitive": False
+    }
         
     def get_model_cache_path(self) -> Path:
         """Get the model cache directory path."""

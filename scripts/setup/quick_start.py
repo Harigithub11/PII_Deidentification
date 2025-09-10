@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
 Quick Start Script for PII De-identification System
 
@@ -11,6 +12,15 @@ import subprocess
 import logging
 from pathlib import Path
 from typing import List, Dict, Any
+
+# Configure UTF-8 environment for Windows compatibility
+if sys.platform == 'win32':
+    os.environ['PYTHONUTF8'] = '1'
+    os.environ['PYTHONIOENCODING'] = 'utf-8'
+    try:
+        os.system('chcp 65001 >nul 2>&1')
+    except:
+        pass
 
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -27,7 +37,7 @@ class QuickStart:
         
     def run_quick_start(self):
         """Run the complete quick start process."""
-        print("🚀 PII De-identification System - Quick Start")
+        print("[START] PII De-identification System - Quick Start")
         print("=" * 60)
         
         try:
@@ -52,7 +62,7 @@ class QuickStart:
             # Health check
             self._run_health_check()
             
-            print("\n🎉 Quick start completed successfully!")
+            print("\n[SUCCESS] Quick start completed successfully!")
             print("\nNext steps:")
             print("1. Activate virtual environment:")
             print(f"   Windows: {self.venv_path}\\Scripts\\activate")
@@ -62,26 +72,26 @@ class QuickStart:
             print("3. Access the web interface: http://localhost:8000")
             
         except Exception as e:
-            print(f"\n❌ Quick start failed: {e}")
+            print(f"\n[ERROR] Quick start failed: {e}")
             print("Please check the error messages above and try again.")
             sys.exit(1)
     
     def _check_python_version(self):
         """Check if Python version is compatible."""
-        print("🔍 Checking Python version...")
+        print("[CHECK] Checking Python version...")
         
         version = sys.version_info
         if version.major < 3 or (version.major == 3 and version.minor < 9):
             raise Exception(f"Python 3.9+ required, found {version.major}.{version.minor}")
         
-        print(f"✓ Python {version.major}.{version.minor}.{version.micro} - Compatible")
+        print(f"[OK] Python {version.major}.{version.minor}.{version.micro} - Compatible")
     
     def _create_virtual_environment(self):
         """Create Python virtual environment."""
-        print("\n📦 Creating virtual environment...")
+        print("\n[VENV] Creating virtual environment...")
         
         if self.venv_path.exists():
-            print("✓ Virtual environment already exists")
+            print("[OK] Virtual environment already exists")
             return
         
         try:
@@ -90,7 +100,7 @@ class QuickStart:
                 check=True,
                 capture_output=True
             )
-            print("✓ Virtual environment created successfully")
+            print("[OK] Virtual environment created successfully")
         except subprocess.CalledProcessError as e:
             raise Exception(f"Failed to create virtual environment: {e}")
     
@@ -105,7 +115,7 @@ class QuickStart:
     
     def _install_dependencies(self):
         """Install Python dependencies."""
-        print("\n📚 Installing dependencies...")
+        print("\n[INSTALL] Installing dependencies...")
         
         pip_cmd = self._get_pip_command()
         
@@ -116,7 +126,7 @@ class QuickStart:
                 check=True,
                 capture_output=True
             )
-            print("✓ pip upgraded")
+            print("[OK] pip upgraded")
             
             # Install requirements
             subprocess.run(
@@ -124,14 +134,14 @@ class QuickStart:
                 check=True,
                 capture_output=True
             )
-            print("✓ Dependencies installed successfully")
+            print("[OK] Dependencies installed successfully")
             
         except subprocess.CalledProcessError as e:
             raise Exception(f"Failed to install dependencies: {e}")
     
     def _setup_models(self):
         """Setup AI models."""
-        print("\n🤖 Setting up AI models...")
+        print("\n[AI] Setting up AI models...")
         
         try:
             # Run model installation script
@@ -148,14 +158,14 @@ class QuickStart:
                 check=True,
                 cwd=self.project_root
             )
-            print("✓ AI models setup completed")
+            print("[OK] AI models setup completed")
             
         except subprocess.CalledProcessError as e:
             raise Exception(f"Failed to setup AI models: {e}")
     
     def _initialize_database(self):
         """Initialize the database."""
-        print("\n🗄️ Initializing database...")
+        print("\n[DATABASE] Initializing database...")
         
         try:
             # Create database directory
@@ -166,16 +176,16 @@ class QuickStart:
             db_file = db_dir / "pii_system.db"
             if not db_file.exists():
                 db_file.touch()
-                print("✓ Database file created")
+                print("[OK] Database file created")
             else:
-                print("✓ Database file already exists")
+                print("[OK] Database file already exists")
                 
         except Exception as e:
             raise Exception(f"Failed to initialize database: {e}")
     
     def _setup_airflow(self):
         """Setup Apache Airflow."""
-        print("\n🔄 Setting up Apache Airflow...")
+        print("\n[AIRFLOW] Setting up Apache Airflow...")
         
         try:
             # Set Airflow environment variables
@@ -192,17 +202,17 @@ class QuickStart:
                 full_path = self.project_root / dir_path
                 full_path.mkdir(parents=True, exist_ok=True)
             
-            print("✓ Airflow directories created")
+            print("[OK] Airflow directories created")
             
             # Note: Airflow will be fully configured when the system starts
-            print("ℹ️ Airflow will be configured on first startup")
+            print("[INFO] Airflow will be configured on first startup")
             
         except Exception as e:
             raise Exception(f"Failed to setup Airflow: {e}")
     
     def _run_health_check(self):
         """Run a basic health check."""
-        print("\n🏥 Running health check...")
+        print("\n[HEALTH] Running health check...")
         
         try:
             # Check if key directories exist
@@ -233,7 +243,7 @@ class QuickStart:
                 if not file_path.exists():
                     raise Exception(f"Required file missing: {file_name}")
             
-            print("✓ Health check passed")
+            print("[OK] Health check passed")
             
         except Exception as e:
             raise Exception(f"Health check failed: {e}")

@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pytest:*)",
+      "Bash(SET PYTHONPATH=%CD%)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

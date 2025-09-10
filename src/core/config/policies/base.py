@@ -11,14 +11,42 @@ from pydantic import BaseModel, Field
 
 
 class RedactionMethod(str, Enum):
-    """Supported redaction methods."""
-    BLACKOUT = "blackout"
-    WHITEOUT = "whiteout"
-    BLUR = "blur"
-    PIXELATE = "pixelate"
-    PSEUDONYMIZE = "pseudonymize"
-    GENERALIZE = "generalize"
-    DELETE = "delete"
+    """Comprehensive redaction methods for text and visual PII."""
+    
+    # Text Redaction Methods
+    DELETE = "delete"                    # Complete removal
+    MASK_ASTERISK = "mask_asterisk"     # Replace with ***
+    MASK_X = "mask_x"                   # Replace with XXX
+    MASK_HASH = "mask_hash"             # Replace with ###
+    REDACTED_LABEL = "redacted_label"   # Replace with [REDACTED]
+    PLACEHOLDER = "placeholder"         # Replace with custom placeholder
+    PARTIAL_MASK = "partial_mask"       # Show first/last chars, mask middle
+    WHITESPACE = "whitespace"           # Replace with spaces
+    
+    # Advanced Text Methods
+    PSEUDONYMIZE = "pseudonymize"       # Replace with consistent fake data
+    GENERALIZE = "generalize"          # Replace with generalized category
+    HASH = "hash"                      # Replace with hash value
+    ENCRYPT = "encrypt"                # Replace with encrypted value
+    
+    # Visual Redaction Methods
+    BLACKOUT = "blackout"              # Black solid fill
+    WHITEOUT = "whiteout"              # White solid fill
+    BLUR = "blur"                      # Standard blur
+    GAUSSIAN_BLUR = "gaussian_blur"     # Gaussian blur
+    PIXELATE = "pixelate"              # Pixelation effect
+    MOSAIC = "mosaic"                  # Mosaic tiles
+    SOLID_COLOR = "solid_color"        # Custom color fill
+    
+    # Advanced Visual Methods
+    PATTERN_FILL = "pattern_fill"       # Pattern overlay
+    DISTORT = "distort"                # Geometric distortion
+    NOISE = "noise"                    # Random noise overlay
+    INVERT = "invert"                  # Color inversion
+    
+    # Document-Specific Methods
+    CROP_OUT = "crop_out"              # Remove region entirely
+    MARGIN_NOTE = "margin_note"        # Add redaction note in margin
 
 
 class PIIType(str, Enum):
@@ -49,12 +77,22 @@ class PIIType(str, Enum):
     
     # Medical
     MEDICAL_RECORD = "medical_record"
+    MEDICAL_LICENSE = "medical_license"
     DIAGNOSIS = "diagnosis"
     MEDICATION = "medication"
     TREATMENT = "treatment"
     
-    # Other
+    # Technology & Digital
     IP_ADDRESS = "ip_address"
+    URL = "url"
+    CRYPTO_ADDRESS = "crypto_address"
+    
+    # Business & Organization
+    ORGANIZATION = "organization"
+    FINANCIAL = "financial"
+    NUMBER = "number"
+    
+    # Other
     LOCATION = "location"
     SIGNATURE = "signature"
     PHOTO = "photo"

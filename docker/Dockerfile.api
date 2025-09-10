@@ -1,0 +1,96 @@
+# Multi-stage build for PII De-identification System API
+FROM python:3.11-slim as base
+
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    # Essential build tools
+    build-essential \
+    cmake \
+    pkg-config \
+    # OCR dependencies
+    tesseract-ocr \
+    tesseract-ocr-eng \
+    tesseract-ocr-hin \
+    libtesseract-dev \
+    # Image processing dependencies
+    libgl1-mesa-glx \
+    libglib2.0-0 \
+    libsm6 \
+    libxext6 \
+    libxrender-dev \
+    libgomp1 \
+    # OpenCV dependencies
+    libopencv-dev \
+    python3-opencv \
+    # PDF processing
+    poppler-utils \
+    # Network tools for health checks
+    curl \
+    # Clean up
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get clean
+
+# Create app user for security
+RUN useradd --create-home --shell /bin/bash app
+
+# Set work directory
+WORKDIR /app
+
+# Install Python dependencies in a separate stage for better caching
+FROM base as python-deps
+
+# Copy requirements first for better caching
+COPY requirements.txt .
+
+# Install Python packages
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Download and install spaCy models
+RUN python -m spacy download en_core_web_lg \
+    && python -m spacy download en_core_web_sm
+
+# Final stage
+FROM python-deps as final
+
+# Copy application code
+COPY --chown=app:app src/ ./src/
+COPY --chown=app:app scripts/ ./scripts/
+COPY --chown=app:app config/ ./config/
+
+# Create necessary directories
+RUN mkdir -p \
+    /app/data/input \
+    /app/data/processing \
+    /app/data/output \
+    /app/data/audit \
+    /app/data/temp \
+    /app/models/cache \
+    /app/models/downloads \
+    /app/logs \
+    /app/orchestration \
+    && chown -R app:app /app
+
+# Switch to non-root user
+USER app
+
+# Set Python path
+ENV PYTHONPATH=/app
+
+# Initialize models and database
+RUN python scripts/setup/install_models.py || true
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+    CMD curl -f http://localhost:8000/health || exit 1
+
+# Expose port
+EXPOSE 8000
+
+# Run the application
+CMD ["python", "-m", "src.main"]

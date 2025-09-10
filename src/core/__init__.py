@@ -11,13 +11,13 @@ This package contains the core functionality for:
 
 from .config.settings import Settings
 from .models.model_manager import ModelManager
-from .processors.document_processor import DocumentProcessor
+from .processing.document_factory import DocumentFactory
 from .database.models import Base, Job, PIIDetection, RedactionAction, AuditLog
 
 __all__ = [
     "Settings",
     "ModelManager",
-    "DocumentProcessor", 
+    "DocumentFactory", 
     "Base",
     "Job",
     "PIIDetection",

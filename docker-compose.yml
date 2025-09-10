@@ -1,107 +1,320 @@
 version: '3.8'
 
 services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: pii-postgres
+    environment:
+      POSTGRES_DB: pii_system
+      POSTGRES_USER: pii_user
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pii_secure_password}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8 --lc-collate=C --lc-ctype=C"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pii_user -d pii_system"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - pii-network
+
+  # Redis Cache and Message Broker
+  redis:
+    image: redis:7-alpine
+    container_name: pii-redis
+    command: redis-server --requirepass ${REDIS_PASSWORD:-redis_secure_password}
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "redis-cli", "--raw", "incr", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - pii-network
+
+  # Main API Application
   api:
     build:
       context: .
       dockerfile: docker/Dockerfile.api
+    container_name: pii-api
     ports:
-      - "8000:8000"
+      - "${API_PORT:-8000}:8000"
     volumes:
-      - ./data:/app/data
-      - ./models:/app/models
-      - ./logs:/app/logs
-      - ./config:/app/config
+      - app_data:/app/data
+      - app_models:/app/models
+      - app_logs:/app/logs
+      - ./config:/app/config:ro
     environment:
-      - DATABASE_URL=sqlite:///./data/pii_system.db
+      # Application
+      - APP_NAME=PII De-identification System
+      - APP_VERSION=2.1.0
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      
+      # Database
+      - DATABASE_URL=postgresql://pii_user:${POSTGRES_PASSWORD:-pii_secure_password}@postgres:5432/pii_system
+      - DATABASE_POOL_SIZE=10
+      
+      # Redis
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis_secure_password}@redis:6379/0
+      
+      # Security
+      - SECRET_KEY=${SECRET_KEY:-your-super-secret-key-change-in-production}
+      - ENCRYPTION_KEY=${ENCRYPTION_KEY:-your-encryption-key-change-in-production}
+      
+      # Models
       - MODEL_CACHE_DIR=/app/models/cache
-      - ENABLE_GPU=false
+      - MODEL_DOWNLOAD_DIR=/app/models/downloads
+      - ENABLE_GPU=${ENABLE_GPU:-false}
+      
+      # CORS
+      - CORS_ORIGINS=["http://localhost:3000", "http://frontend:3000"]
+      
+      # Monitoring
+      - ENABLE_METRICS=true
+      - HEALTH_CHECK_INTERVAL=30
+      
+      # Component Monitoring
+      - COMPONENT_MONITORING_ENABLED=true
+      - ALERT_NOTIFICATIONS_ENABLED=true
     depends_on:
-      - airflow-webserver
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 5
+      start_period: 60s
+    networks:
+      - pii-network
 
-  frontend:
+  # Celery Worker
+  celery-worker:
     build:
-      context: ./frontend
-      dockerfile: ../docker/Dockerfile.frontend
-    ports:
-      - "3000:3000"
-    depends_on:
-      - api
-    restart: unless-stopped
+      context: .
+      dockerfile: docker/Dockerfile.api
+    container_name: pii-celery-worker
+    command: celery -A src.core.batch.celery_config worker --loglevel=info --concurrency=2
+    volumes:
+      - app_data:/app/data
+      - app_models:/app/models
+      - app_logs:/app/logs
+      - ./config:/app/config:ro
     environment:
-      - REACT_APP_API_URL=http://localhost:8000
+      # Application
+      - APP_NAME=PII De-identification System
+      - DEBUG=${DEBUG:-false}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      
+      # Database
+      - DATABASE_URL=postgresql://pii_user:${POSTGRES_PASSWORD:-pii_secure_password}@postgres:5432/pii_system
+      
+      # Redis
+      - REDIS_URL=redis://:${REDIS_PASSWORD:-redis_secure_password}@redis:6379/0
+      
+      # Models
+      - MODEL_CACHE_DIR=/app/models/cache
+      - ENABLE_GPU=${ENABLE_GPU:-false}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "celery", "-A", "src.core.batch.celery_config", "inspect", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - pii-network
 
+  # Airflow Database Init
+  airflow-init:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.worker
+    container_name: pii-airflow-init
+    entrypoint: /bin/bash
+    command: >
+      -c "
+        airflow db init &&
+        airflow users create --role Admin --username admin --email admin@example.com --firstname Admin --lastname User --password admin123
+      "
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql://pii_user:${POSTGRES_PASSWORD:-pii_secure_password}@postgres:5432/airflow
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY:-your-fernet-key-change-in-production}
+      - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW_SECRET_KEY:-your-airflow-secret-key}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - pii-network
+
+  # Airflow Webserver
   airflow-webserver:
     build:
       context: .
       dockerfile: docker/Dockerfile.worker
+    container_name: pii-airflow-webserver
     command: airflow webserver
     ports:
-      - "8080:8080"
+      - "${AIRFLOW_PORT:-8080}:8080"
     volumes:
-      - ./orchestration:/app/orchestration
-      - ./data:/app/data
-      - ./logs/airflow:/app/logs
-      - ./config:/app/config
+      - ./orchestration:/opt/airflow/dags
+      - app_logs:/opt/airflow/logs
+      - ./config:/opt/airflow/config:ro
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:///./data/airflow.db
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql://pii_user:${POSTGRES_PASSWORD:-pii_secure_password}@postgres:5432/airflow
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
-      - AIRFLOW__CORE__FERNET_KEY=your-fernet-key-here
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY:-your-fernet-key-change-in-production}
+      - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW_SECRET_KEY:-your-airflow-secret-key}
+      - AIRFLOW__WEBSERVER__EXPOSE_CONFIG=True
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
       interval: 30s
       timeout: 10s
-      retries: 3
+      retries: 5
+      start_period: 60s
+    networks:
+      - pii-network
 
+  # Airflow Scheduler
   airflow-scheduler:
     build:
       context: .
       dockerfile: docker/Dockerfile.worker
+    container_name: pii-airflow-scheduler
     command: airflow scheduler
     volumes:
-      - ./orchestration:/app/orchestration
-      - ./data:/app/data
-      - ./logs/airflow:/app/logs
-      - ./config:/app/config
+      - ./orchestration:/opt/airflow/dags
+      - app_logs:/opt/airflow/logs
+      - ./config:/opt/airflow/config:ro
     environment:
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=sqlite:///./data/airflow.db
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql://pii_user:${POSTGRES_PASSWORD:-pii_secure_password}@postgres:5432/airflow
       - AIRFLOW__CORE__LOAD_EXAMPLES=False
-      - AIRFLOW__CORE__FERNET_KEY=your-fernet-key-here
+      - AIRFLOW__CORE__FERNET_KEY=${AIRFLOW_FERNET_KEY:-your-fernet-key-change-in-production}
     depends_on:
-      - airflow-webserver
+      airflow-init:
+        condition: service_completed_successfully
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "airflow scheduler"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+    networks:
+      - pii-network
 
-  # Optional: PostgreSQL for production use
-  # postgres:
-  #   image: postgres:15
-  #   environment:
-  #     POSTGRES_DB: pii_system
-  #     POSTGRES_USER: pii_user
-  #     POSTGRES_PASSWORD: pii_password
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   ports:
-  #     - "5432:5432"
-  #   restart: unless-stopped
+  # Frontend Application
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.frontend
+      args:
+        - REACT_APP_API_URL=${FRONTEND_API_URL:-http://localhost:8000}
+    container_name: pii-frontend
+    ports:
+      - "${FRONTEND_PORT:-3000}:3000"
+    depends_on:
+      api:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    networks:
+      - pii-network
 
-  # Optional: Redis for Celery backend
-  # redis:
-  #   image: redis:7-alpine
-  #   ports:
-  #     - "6379:6379"
-  #   restart: unless-stopped
+  # Monitoring - Prometheus (Optional)
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: pii-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    networks:
+      - pii-network
+    profiles:
+      - monitoring
+
+  # Monitoring - Grafana (Optional)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: pii-grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_PASSWORD:-admin123}
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docker/grafana-datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+    depends_on:
+      - prometheus
+    restart: unless-stopped
+    networks:
+      - pii-network
+    profiles:
+      - monitoring
 
 volumes:
-  data:
-  models:
-  logs:
-  # postgres_data:  # Uncomment for PostgreSQL
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  app_data:
+    driver: local
+  app_models:
+    driver: local
+  app_logs:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  pii-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
