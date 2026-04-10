@@ -102,7 +102,7 @@ A production-ready, local AI-powered system for detecting and anonymizing Person
 
 ```
 pii-deidentification/
-├── src/                    # Source code
+├── src/                   # Source code
 │   ├── core/              # Core processing logic
 │   ├── api/               # FastAPI application
 │   ├── cli/               # Command-line interface
@@ -184,15 +184,6 @@ python scripts/deployment/start_services.py
 4. Add tests
 5. Submit a pull request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-- **Issues**: [GitHub Issues](https://github.com/your-repo/issues)
-- **Documentation**: [Project Wiki](https://github.com/your-repo/wiki)
-- **Discussions**: [GitHub Discussions](https://github.com/your-repo/discussions)
 
 ## 🙏 Acknowledgments
 
@@ -202,4 +193,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Built with ❤️ by Team 404fixed!**
