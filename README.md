@@ -17,13 +17,13 @@ A production-ready, local AI-powered system for detecting and anonymizing Person
 ## 🏗️ Architecture Overview
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    Web Interface (FastAPI)                  │
-├─────────────────────────────────────────────────────────────┤
-│              Local Workflow Orchestrator                    │
-│                  (Apache Airflow)                          │
-├─────────────────────────────────────────────────────────────┤
-│  Document Processing Pipeline                               │
+┌───────────────────────────────────────────────────────────┐
+│                    Web Interface (FastAPI)                │
+├───────────────────────────────────────────────────────────┤
+│              Local Workflow Orchestrator                  │
+│                  (Apache Airflow)                         │
+├───────────────────────────────────────────────────────────┤
+│  Document Processing Pipeline                             │
 │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐          │
 │  │   OCR       │ │   Layout    │ │  PII NER    │          │
 │  │ (Tesseract) │ │(LayoutLMv3) │ │(spaCy+NER)  │          │
@@ -32,10 +32,10 @@ A production-ready, local AI-powered system for detecting and anonymizing Person
 │  │  Visual PII │ │   Mistral   │ │  Redaction  │          │
 │  │  (YOLOv8)   │ │     7B      │ │   Engine    │          │
 │  └─────────────┘ └─────────────┘ └─────────────┘          │
-├─────────────────────────────────────────────────────────────┤
-│              Local Storage & Database                       │
-│        (File System + SQLite/PostgreSQL)                   │
-└─────────────────────────────────────────────────────────────┘
+├───────────────────────────────────────────────────────────┤
+│              Local Storage & Database                     │
+│        (File System + SQLite/PostgreSQL)                  │
+└───────────────────────────────────────────────────────────┘
 ```
 
 ## 🛠️ Technology Stack
