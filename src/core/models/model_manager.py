@@ -82,6 +82,22 @@ class ModelManager:
                 return self._load_yolo_model()
             elif model_name == "mistral":
                 return self._load_mistral_model()
+            elif model_name == "document_factory":
+                return self._load_document_factory()
+            elif model_name == "pdf_processor":
+                return self._load_pdf_processor()
+            elif model_name == "image_processor":
+                return self._load_image_processor()
+            elif model_name == "scanner_processor":
+                return self._load_scanner_processor()
+            elif model_name == "ner_model":
+                return self._load_ner_model()
+            elif model_name == "visual_model":
+                return self._load_visual_model()
+            elif model_name == "ocr_model":
+                return self._load_ocr_model()
+            elif model_name == "paddleocr":
+                return self._load_paddleocr_model()
             else:
                 logger.error(f"Unknown model: {model_name}")
                 return None
@@ -92,12 +108,15 @@ class ModelManager:
     def _load_tesseract_model(self):
         """Load Tesseract OCR model."""
         try:
-            import pytesseract
-            # Configure Tesseract
-            pytesseract.pytesseract.tesseract_cmd = self._find_tesseract_binary()
-            return pytesseract
+            from .ocr_models import create_tesseract_model
+            model = create_tesseract_model()
+            if model.load():
+                return model
+            else:
+                logger.error("Failed to load Tesseract OCR model")
+                return None
         except ImportError:
-            logger.error("pytesseract not installed")
+            logger.error("OCR models not available")
             return None
     
     def _load_spacy_model(self):
@@ -184,6 +203,110 @@ class ModelManager:
             logger.error(f"Failed to load Mistral model: {e}")
             return None
     
+    def _load_document_factory(self):
+        """Load Document Factory processor."""
+        try:
+            from ..processing.document_factory import DocumentFactory
+            factory = DocumentFactory()
+            logger.info("DocumentFactory loaded successfully")
+            return factory
+        except Exception as e:
+            logger.error(f"Failed to load DocumentFactory: {e}")
+            return None
+    
+    def _load_pdf_processor(self):
+        """Load PDF Processor."""
+        try:
+            from ..processing.pdf_processor import PDFProcessor
+            processor = PDFProcessor()
+            logger.info("PDFProcessor loaded successfully")
+            return processor
+        except Exception as e:
+            logger.error(f"Failed to load PDFProcessor: {e}")
+            return None
+    
+    def _load_image_processor(self):
+        """Load Image Processor."""
+        try:
+            from ..processing.image_processor import ImageProcessor
+            processor = ImageProcessor()
+            logger.info("ImageProcessor loaded successfully")
+            return processor
+        except Exception as e:
+            logger.error(f"Failed to load ImageProcessor: {e}")
+            return None
+    
+    def _load_scanner_processor(self):
+        """Load Scanner Processor."""
+        try:
+            from ..processing.scanner_processor import ScannerProcessor
+            processor = ScannerProcessor()
+            logger.info("ScannerProcessor loaded successfully")
+            return processor
+        except Exception as e:
+            logger.error(f"Failed to load ScannerProcessor: {e}")
+            return None
+    
+    def _load_ner_model(self):
+        """Load NER model for PII detection."""
+        try:
+            from .ner_models import get_default_ner_model
+            model = get_default_ner_model()
+            if model and not model.is_loaded:
+                if not model.load():
+                    logger.error("Failed to load default NER model")
+                    return None
+            logger.info("NER model loaded successfully")
+            return model
+        except Exception as e:
+            logger.error(f"Failed to load NER model: {e}")
+            return None
+    
+    def _load_visual_model(self):
+        """Load Visual PII detection model."""
+        try:
+            from .visual_models import get_default_visual_model
+            model = get_default_visual_model()
+            if model and not model.is_loaded:
+                if not model.load():
+                    logger.error("Failed to load default visual model")
+                    return None
+            logger.info("Visual PII detection model loaded successfully")
+            return model
+        except Exception as e:
+            logger.error(f"Failed to load visual model: {e}")
+            return None
+    
+    def _load_ocr_model(self):
+        """Load default OCR model (Tesseract preferred)."""
+        try:
+            from .ocr_models import get_default_ocr_model, OCREngine
+            model = get_default_ocr_model(OCREngine.TESSERACT)
+            if model:
+                logger.info("Default OCR model loaded successfully")
+                return model
+            else:
+                logger.error("Failed to load default OCR model")
+                return None
+        except Exception as e:
+            logger.error(f"Failed to load OCR model: {e}")
+            return None
+    
+    def _load_paddleocr_model(self):
+        """Load PaddleOCR model."""
+        try:
+            from .ocr_models import create_paddle_ocr_model
+            model = create_paddle_ocr_model()
+            if model.load():
+                logger.info("PaddleOCR model loaded successfully")
+                return model
+            else:
+                logger.error("Failed to load PaddleOCR model")
+                return None
+        except Exception as e:
+            logger.error(f"Failed to load PaddleOCR model: {e}")
+            return None
+    
     def _find_tesseract_binary(self) -> str:
         """Find Tesseract binary path."""
         # Common paths
@@ -225,11 +348,19 @@ class ModelManager:
     def _estimate_model_memory(self, model_name: str) -> int:
         """Estimate memory usage for a model (in MB)."""
         memory_estimates = {
-            "tesseract": 100,      # ~100MB
-            "spacy": 500,          # ~500MB
-            "layoutlm": 1000,      # ~1GB
-            "yolo": 800,           # ~800MB
-            "mistral": 4000,       # ~4GB (quantized)
+            "tesseract": 100,           # ~100MB
+            "spacy": 500,               # ~500MB
+            "layoutlm": 1000,           # ~1GB
+            "yolo": 800,                # ~800MB
+            "mistral": 4000,            # ~4GB (quantized)
+            "document_factory": 50,     # ~50MB
+            "pdf_processor": 200,       # ~200MB
+            "image_processor": 300,     # ~300MB
+            "scanner_processor": 150,   # ~150MB
+            "ner_model": 600,           # ~600MB (Presidio + spaCy)
+            "visual_model": 800,        # ~800MB (YOLOv8)
+            "ocr_model": 150,           # ~150MB (Tesseract OCR)
+            "paddleocr": 400,           # ~400MB (PaddleOCR)
         }
         
         return memory_estimates.get(model_name, 1000)

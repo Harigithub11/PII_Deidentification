@@ -1,189 +1,51 @@
+# Environment
+.env
+.env.local
+.env.*.local
+
 # Python
 __pycache__/
 *.py[cod]
-*$py.class
-*.so
+*.pyo
+*.pyd
 .Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-<<<<<<< HEAD
-pip-wheel-metadata/
-=======
->>>>>>> c8ebce61f799d32c82776b671db0133da2fce30e
-share/python-wheels/
-*.egg-info/
-.installed.cfg
 *.egg
-MANIFEST
-
-# Virtual Environment
+*.egg-info/
+dist/
+build/
+.eggs/
+.venv/
 venv/
 env/
-ENV/
-<<<<<<< HEAD
-.venv/
-.env
-
-# IDEs
-=======
-env.bak/
-venv.bak/
-
-# Environment Variables
-.env
-.env.local
-.env.production
-.env.staging
-
-# IDE
->>>>>>> c8ebce61f799d32c82776b671db0133da2fce30e
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-<<<<<<< HEAD
-# Environment Variables
-.env.local
-.env.development
-.env.production
-
-# Data Files
-data/input/*
-data/output/*
-data/temp/*
-!data/input/.gitkeep
-!data/output/.gitkeep
-!data/temp/.gitkeep
-
-# Logs
-logs/*.log
-*.log
 
 # Database
 *.db
-*.sqlite3
+*.db-shm
+*.db-wal
+*.db.backup*
+data/
 
-# Docker
-.dockerignore
-=======
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# Testing
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-.nox/
-.coverage.*
-.cache
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.hypothesis/
+# Models (large binary files)
+models/
 
 # Logs
 logs/
 *.log
-*.log.*
 
-# Database
-*.db
-*.sqlite
-*.sqlite3
-
-# Model Files (Large files)
-models/downloads/
-models/cache/
-*.pth
-*.pt
-*.onnx
-*.h5
-*.pb
-
-# Data Files
-data/input/
-data/processing/
-data/output/
-data/temp/
-data/backups/
-
-# Airflow
-airflow.cfg
-airflow.db
-airflow-webserver.pid
-airflow-scheduler.pid
-
-# Docker
-.dockerignore
-docker-compose.override.yml
->>>>>>> c8ebce61f799d32c82776b671db0133da2fce30e
-
-# OS
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-
-<<<<<<< HEAD
-# Models and Large Files
-*.model
-*.bin
-*.h5
-*.pkl
-
-# Test Coverage
-.coverage
-htmlcov/
-.pytest_cache/
-
-# Documentation
-docs/_build/
-=======
-# Temporary Files
-*.tmp
-*.temp
-*.bak
+# IDE
+.idea/
+.vscode/
 *.swp
 *.swo
 
-# Security
-*.key
-*.pem
-*.crt
-secrets/
-secrets.yaml
+# OS
+.DS_Store
+Thumbs.db
 
-# Frontend
-frontend/node_modules/
-frontend/build/
-frontend/.next/
-frontend/.nuxt/
-frontend/dist/
-frontend/.cache/
+# Temporary / backup
+Backup-lib/
+*.tmp
+*.bak
 
-# Documentation
-docs/_build/
-docs/build/
-
-# Backup files
-*.backup
-*.old
-*.orig
->>>>>>> c8ebce61f799d32c82776b671db0133da2fce30e
+# Node
+node_modules/

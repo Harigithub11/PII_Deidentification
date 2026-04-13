@@ -1,0 +1,50 @@
+# Docker Compose override for development environment
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.api
+    volumes:
+      # Mount source code for development
+      - ./src:/app/src
+      - ./config:/app/config
+      - ./logs:/app/logs
+    environment:
+      - DEBUG=true
+      - LOG_LEVEL=DEBUG
+    command: [
+      "uvicorn", 
+      "src.api.main:app", 
+      "--host", "0.0.0.0", 
+      "--port", "8000", 
+      "--reload", 
+      "--log-level", "debug"
+    ]
+
+  database:
+    environment:
+      - POSTGRES_DB=deidentify_dev_db
+    # Expose database port for development tools
+    ports:
+      - "5432:5432"
+
+  prefect-server:
+    environment:
+      - PREFECT_API_DATABASE_CONNECTION_URL=postgresql+asyncpg://deidentify_user:${POSTGRES_PASSWORD}@database:5432/deidentify_dev_db
+
+  # Development tools
+  adminer:
+    image: adminer:4.8.1-standalone
+    restart: unless-stopped
+    ports:
+      - "8081:8080"
+    depends_on:
+      - database
+    networks:
+      - deidentify-network
+
+networks:
+  deidentify-network:
+    driver: bridge

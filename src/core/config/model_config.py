@@ -10,6 +10,30 @@ from typing import Dict, List, Optional, Union
 from pydantic import BaseModel, Field
 
 
+class DocumentProcessingConfig(BaseModel):
+    """Configuration for document processing pipeline."""
+    
+    # Supported formats
+    supported_pdf_formats: List[str] = Field(default=[".pdf"])
+    supported_image_formats: List[str] = Field(default=[".png", ".jpg", ".jpeg", ".tiff", ".tif", ".bmp", ".webp", ".gif"])
+    
+    # File size limits
+    max_file_size_mb: int = Field(default=100)
+    max_pdf_pages: int = Field(default=500)
+    max_image_dimension: int = Field(default=8000)
+    min_image_dimension: int = Field(default=50)
+    
+    # Processing options
+    auto_detect_scanned: bool = Field(default=True)
+    apply_scan_optimization: bool = Field(default=True)
+    enhance_for_ocr: bool = Field(default=True)
+    preserve_original_images: bool = Field(default=True)
+    
+    # Quality thresholds
+    min_quality_score: float = Field(default=0.3)
+    skip_low_quality_pages: bool = Field(default=False)
+
+
 class OCRModelConfig(BaseModel):
     """Configuration for OCR models."""
     
@@ -27,7 +51,12 @@ class OCRModelConfig(BaseModel):
     # General OCR Settings
     confidence_threshold: float = Field(default=0.7)
     max_image_size: int = Field(default=4096)
-    supported_formats: List[str] = Field(default=["png", "jpg", "jpeg", "tiff", "tif", "bmp"])
+    supported_formats: List[str] = Field(default=["png", "jpg", "jpeg", "tiff", "tif", "bmp", "webp", "gif"])
+    
+    # Multi-format specific settings
+    pdf_page_dpi: int = Field(default=300)
+    image_preprocessing: bool = Field(default=True)
+    adaptive_preprocessing: bool = Field(default=True)
 
 
 class NERModelConfig(BaseModel):
@@ -96,6 +125,11 @@ class VisualModelConfig(BaseModel):
     max_image_dimension: int = Field(default=1024)
     preprocessing_enabled: bool = Field(default=True)
     augmentation_enabled: bool = Field(default=False)
+    
+    # Multi-format support
+    process_pdf_images: bool = Field(default=True)
+    process_scanned_docs: bool = Field(default=True)
+    adaptive_detection: bool = Field(default=True)
 
 
 class LLMModelConfig(BaseModel):
@@ -153,6 +187,10 @@ class LLMModelConfig(BaseModel):
 class ModelConfig(BaseModel):
     """Main model configuration container."""
     
+    # Document processing configuration
+    document_processing: DocumentProcessingConfig = Field(default_factory=DocumentProcessingConfig)
+    
+    # Model configurations
     ocr: OCRModelConfig = Field(default_factory=OCRModelConfig)
     ner: NERModelConfig = Field(default_factory=NERModelConfig)
     layout: LayoutModelConfig = Field(default_factory=LayoutModelConfig)
@@ -185,6 +223,8 @@ class ModelConfig(BaseModel):
             'transformers': base_path / 'transformers',
             'yolo': base_path / 'yolo',
             'custom': base_path / 'custom',
+            'document_processing': base_path / 'document_processing',
+            'temp_processing': Path(self.cache_dir) / 'temp_processing',
         }
     
     def validate_configuration(self) -> bool:

@@ -1,0 +1,28 @@
+{
+  "file_size_limits": {
+    "default_upload_limit_mb": 10,
+    "pdf_max_size_mb": 100,
+    "image_max_size_mb": 50,
+    "text_max_size_mb": 10,
+    "docx_max_size_mb": 25,
+    "premium_upload_limit_mb": 50,
+    "premium_pdf_max_size_mb": 500,
+    "premium_image_max_size_mb": 200
+  },
+  "processing_limits": {
+    "max_pdf_pages": 1000,
+    "max_text_length": 100000,
+    "processing_timeout_seconds": 300,
+    "premium_max_pdf_pages": 5000,
+    "premium_max_text_length": 500000,
+    "premium_processing_timeout": 1800
+  },
+  "database_url": "sqlite:///./enterprise_deidentification.db",
+  "access_token_expire_minutes": 30,
+  "enable_ocr": true,
+  "enable_magic_detection": true,
+  "debug_mode": false,
+  "log_level": "INFO",
+  "log_to_file": false,
+  "log_file_path": "./logs/system.log"
+}

@@ -10,21 +10,33 @@ This package contains model management and AI model implementations for:
 """
 
 from .model_manager import ModelManager
-from .ocr_models import OCRModel, TesseractModel, PaddleOCRModel
-from .ner_models import NERModel, SpacyNERModel, PresidioNERModel
-from .layout_models import LayoutModel, LayoutLMv3Model
-from .llm_models import LLMModel, MistralModel
+from .ner_models import NERModel, PresidioNERModel, SpacyNERModel
+from .visual_models import VisualDetectionModel, YOLOv8VisualModel, VisualPIIEntity, BoundingBox
+from .ocr_models import (
+    OCRModel, TesseractOCRModel, PaddleOCRModel, OCRResult, OCRTextBlock, 
+    OCRBoundingBox, OCREngine, LanguageCode, create_tesseract_model, 
+    create_paddle_ocr_model, get_default_ocr_model, get_available_ocr_engines
+)
 
 __all__ = [
     "ModelManager",
-    "OCRModel",
-    "TesseractModel", 
-    "PaddleOCRModel",
     "NERModel",
-    "SpacyNERModel",
     "PresidioNERModel",
-    "LayoutModel",
-    "LayoutLMv3Model",
-    "LLMModel",
-    "MistralModel",
+    "SpacyNERModel",
+    "VisualDetectionModel",
+    "YOLOv8VisualModel", 
+    "VisualPIIEntity",
+    "BoundingBox",
+    "OCRModel",
+    "TesseractOCRModel",
+    "PaddleOCRModel",
+    "OCRResult",
+    "OCRTextBlock",
+    "OCRBoundingBox",
+    "OCREngine",
+    "LanguageCode",
+    "create_tesseract_model",
+    "create_paddle_ocr_model",
+    "get_default_ocr_model",
+    "get_available_ocr_engines",
 ]

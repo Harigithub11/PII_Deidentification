@@ -1,0 +1,1 @@
+Patient Name: John Doe, Date of Birth: 1985-03-15, SSN: 123-45-6789, Phone: (555) 123-4567, Email: john.doe@example.com, Address: 123 Main St, Medical Record Number: MRN-98765

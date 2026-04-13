@@ -1,0 +1,68 @@
+CONFIDENTIAL MEDICAL RECORD
+
+========================================
+ST. MARY'S HOSPITAL PATIENT RECORD
+========================================
+
+PATIENT INFORMATION:
+Patient Name: Dr. Emily Sarah Johnson
+Date of Birth: March 15, 1985
+Age: 38 years
+Gender: Female
+Medical Record Number: MRN-78451296
+Patient ID: PID-2024-0847
+
+CONTACT INFORMATION:
+Home Address: 4521 Medical Center Drive, Boston, MA 02115
+Phone: (617) 555-2847
+Mobile: +1-617-555-9384
+Email: emily.johnson@email.com
+Emergency Contact: Michael Johnson (Spouse) - (617) 555-7291
+
+INSURANCE INFORMATION:
+Primary Insurance: Blue Cross Blue Shield
+Policy Number: BCBS-INS-4729851
+Group Number: GRP-85749
+Member ID: MEM-JE847291
+Provider NPI: 1234567890
+Authorization Code: AUTH-BC847291
+
+MEDICAL INFORMATION:
+Primary Care Physician: Dr. Robert Martinez, NPI: 9876543210
+Specialist: Dr. Jennifer Lee (Cardiologist), NPI: 5432198760
+Pharmacy: CVS Pharmacy #4721, Phone: (617) 555-6382
+
+CURRENT MEDICATIONS:
+1. Lisinopril 10mg daily (for hypertension)
+2. Metformin 500mg twice daily (for diabetes)
+3. Atorvastatin 20mg nightly (for cholesterol)
+
+MEDICAL HISTORY:
+- Diagnosed with Type 2 Diabetes: January 2019
+- Hypertension since: June 2020
+- Last HbA1c: 7.2% (tested on 08/15/2024)
+- Blood pressure reading: 138/85 mmHg (last visit)
+
+LABORATORY RESULTS:
+Test Date: September 5, 2024
+- Glucose: 145 mg/dL
+- Cholesterol: 220 mg/dL
+- Triglycerides: 180 mg/dL
+- Lab ID: LAB-2024-0847
+
+APPOINTMENT SCHEDULE:
+Next Appointment: November 20, 2024 at 2:30 PM
+Follow-up required: 3 months
+Scheduled procedures: Annual physical exam, blood work
+
+NOTES:
+Patient has good medication compliance. Recommend continued monitoring of blood glucose levels and blood pressure. Patient expressed concerns about family history of heart disease.
+
+Attending Physician: Dr. Sarah Wilson, MD
+License Number: LIC-MA-847291
+Date of Record: October 1, 2024
+Hospital Contact: (617) 555-CARE
+
+========================================
+END OF MEDICAL RECORD
+========================================
