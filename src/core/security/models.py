@@ -46,7 +46,7 @@ class User(Base):
     
     # JSON field for user permissions and metadata
     permissions = Column(JSON, default=list)
-    metadata = Column(JSON, default=dict)
+    user_metadata = Column(JSON, default=dict)
     
     # Relationships
     tokens = relationship("Token", back_populates="user", cascade="all, delete-orphan")

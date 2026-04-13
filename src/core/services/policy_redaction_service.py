@@ -13,8 +13,8 @@ from dataclasses import dataclass, field
 
 from ..config.policies.base import PIIType, RedactionMethod
 from ..config.policy_models import (
-    PolicyContext, PolicyDecision, PolicyDecisionType, 
-    PolicyEvaluationResult, PolicyViolation
+    PolicyContext, PolicyDecision, PolicyDecisionType,
+    PolicyViolation
 )
 from ..models.ner_models import PIIEntity
 from ..models.visual_models import VisualPIIEntity
@@ -85,11 +85,9 @@ class PolicyRedactionService:
         request: PolicyRedactionRequest
     ) -> PolicyRedactionResult:
         """Asynchronously perform policy-driven redaction."""
-        return await asyncio.get_event_loop().run_in_executor(
-            None, self.redact_with_policy, request
-        )
+        return await self.redact_with_policy(request)
     
-    def redact_with_policy(self, request: PolicyRedactionRequest) -> PolicyRedactionResult:
+    async def redact_with_policy(self, request: PolicyRedactionRequest) -> PolicyRedactionResult:
         """Perform redaction based on policy evaluation."""
         import time
         start_time = time.time()

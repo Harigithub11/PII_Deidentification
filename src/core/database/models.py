@@ -175,8 +175,8 @@ class AuditMixin:
 
 
 class MetadataMixin:
-    """Mixin for metadata JSONB field."""
-    metadata = Column(JSONB, nullable=False, default=dict, server_default='{}')
+    """Mixin for additional metadata JSONB field."""
+    additional_metadata = Column(JSONB, nullable=False, default=dict, server_default='{}')
 
 
 # =============================================================================

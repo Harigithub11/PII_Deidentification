@@ -16,6 +16,7 @@ from .document_pii_processing import router as document_pii_router
 from .policy_management import router as policy_router
 from .redaction import router as redaction_router
 from .dashboard import router as dashboard_router
+from .dashboard_stats import router as dashboard_stats_router
 from .reporting import router as reporting_router
 from .user_management import router as user_management_router
 from .compliance import router as compliance_router
@@ -24,8 +25,8 @@ from .integrations import router as integrations_router
 from .component_monitoring import router as component_monitoring_router
 
 __all__ = [
-    "document_router", 
-    "auth_router", 
+    "document_router",
+    "auth_router",
     "ocr_router",
     "pii_router",
     "visual_pii_router",
@@ -34,6 +35,7 @@ __all__ = [
     "policy_router",
     "redaction_router",
     "dashboard_router",
+    "dashboard_stats_router",
     "reporting_router",
     "user_management_router",
     "compliance_router",

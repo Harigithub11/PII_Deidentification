@@ -27,9 +27,9 @@ class Settings(BaseSettings):
     api_reload: bool = Field(default=True, env="API_RELOAD")
     
     # Frontend Configuration
-    frontend_url: str = Field(default="http://localhost:3000", env="FRONTEND_URL")
+    frontend_url: str = Field(default="http://localhost:3002", env="FRONTEND_URL")
     cors_origins: List[str] = Field(
-        default=["http://localhost:3000", "http://localhost:8000"],
+        default=["http://localhost:3002", "http://localhost:8000"],
         env="CORS_ORIGINS"
     )
     

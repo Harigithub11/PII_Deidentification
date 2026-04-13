@@ -660,6 +660,143 @@ async def get_compliance_statistics(
     )
 
 
+@router.get("/overview")
+async def get_compliance_overview(
+    current_user: User = Depends(get_current_active_user),
+    db: Session = Depends(get_db_session)
+):
+    """Get compliance overview for dashboard."""
+    try:
+        # Calculate date ranges
+        now = datetime.utcnow()
+        thirty_days_ago = now - timedelta(days=30)
+
+        # GDPR Compliance Status
+        gdpr_documents_processed = db.query(func.count(AuditEvent.id)).filter(
+            and_(
+                AuditEvent.event_type.in_(['document_processed', 'pii_detected']),
+                AuditEvent.event_timestamp >= thirty_days_ago
+            )
+        ).scalar() or 0
+
+        gdpr_violations = db.query(func.count(AuditEvent.id)).filter(
+            and_(
+                AuditEvent.compliance_status == 'violation',
+                AuditEvent.event_timestamp >= thirty_days_ago
+            )
+        ).scalar() or 0
+
+        gdpr_compliance_score = max(0, (gdpr_documents_processed - gdpr_violations) / max(gdpr_documents_processed, 1)) * 100
+
+        # Data Retention Compliance
+        retention_policies_active = db.query(func.count(CompliancePolicy.id)).filter(
+            CompliancePolicy.is_active == True
+        ).scalar() or 0
+
+        # Audit Trail Coverage
+        total_events = db.query(func.count(AuditEvent.id)).filter(
+            AuditEvent.event_timestamp >= thirty_days_ago
+        ).scalar() or 0
+
+        audited_events = db.query(func.count(AuditEvent.id)).filter(
+            and_(
+                AuditEvent.event_timestamp >= thirty_days_ago,
+                AuditEvent.audit_trail_complete == True
+            )
+        ).scalar() or 0
+
+        audit_coverage = (audited_events / max(total_events, 1)) * 100
+
+        # Risk Assessment
+        high_risk_events = db.query(func.count(AuditEvent.id)).filter(
+            and_(
+                AuditEvent.risk_score >= 80,
+                AuditEvent.event_timestamp >= thirty_days_ago
+            )
+        ).scalar() or 0
+
+        # Overall compliance score
+        overall_score = (gdpr_compliance_score + audit_coverage) / 2
+
+        # Determine status
+        if overall_score >= 95:
+            compliance_status = "excellent"
+        elif overall_score >= 85:
+            compliance_status = "good"
+        elif overall_score >= 70:
+            compliance_status = "satisfactory"
+        else:
+            compliance_status = "needs_attention"
+
+        return {
+            "overall_compliance_score": round(overall_score, 1),
+            "compliance_status": compliance_status,
+            "gdpr_compliance": {
+                "score": round(gdpr_compliance_score, 1),
+                "documents_processed": gdpr_documents_processed,
+                "violations": gdpr_violations,
+                "status": "compliant" if gdpr_compliance_score >= 90 else "needs_review"
+            },
+            "data_retention": {
+                "active_policies": retention_policies_active,
+                "status": "active" if retention_policies_active > 0 else "inactive"
+            },
+            "audit_trail": {
+                "coverage_percentage": round(audit_coverage, 1),
+                "total_events": total_events,
+                "audited_events": audited_events,
+                "status": "complete" if audit_coverage >= 95 else "partial"
+            },
+            "risk_assessment": {
+                "high_risk_events": high_risk_events,
+                "status": "low" if high_risk_events < 5 else "moderate" if high_risk_events < 20 else "high"
+            },
+            "recent_activities": [
+                {
+                    "type": "compliance_check",
+                    "message": f"Processed {gdpr_documents_processed} documents with GDPR compliance",
+                    "timestamp": now.isoformat(),
+                    "status": "success"
+                },
+                {
+                    "type": "audit_trail",
+                    "message": f"Maintained audit trail for {audited_events} events",
+                    "timestamp": (now - timedelta(hours=6)).isoformat(),
+                    "status": "info"
+                }
+            ]
+        }
+
+    except Exception as e:
+        logger.error(f"Failed to get compliance overview: {e}")
+        # Return fallback data
+        return {
+            "overall_compliance_score": 0.0,
+            "compliance_status": "unknown",
+            "gdpr_compliance": {
+                "score": 0.0,
+                "documents_processed": 0,
+                "violations": 0,
+                "status": "unknown"
+            },
+            "data_retention": {
+                "active_policies": 0,
+                "status": "inactive"
+            },
+            "audit_trail": {
+                "coverage_percentage": 0.0,
+                "total_events": 0,
+                "audited_events": 0,
+                "status": "unknown"
+            },
+            "risk_assessment": {
+                "high_risk_events": 0,
+                "status": "unknown"
+            },
+            "recent_activities": []
+        }
+
+
 # =============================================================================
 # COMPLIANCE REPORTING
 # =============================================================================

@@ -123,18 +123,16 @@ class PolicyContext:
 class PolicyDecision:
     """Result of policy evaluation for a specific PII entity."""
     
-    # Decision details
+    # Entity information (required fields first)
+    pii_type: PIIType
+    entity_text: str
+    applied_policy: str
+    
+    # Decision details (optional fields with defaults)
     decision_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     decision_type: PolicyDecisionType = PolicyDecisionType.ALLOW
     confidence: float = 1.0
-    
-    # Entity information
-    pii_type: PIIType
-    entity_text: str
     entity_position: Optional[Dict[str, int]] = None
-    
-    # Policy information
-    applied_policy: str
     applied_rule: Optional[str] = None
     policy_priority: PolicyPriority = PolicyPriority.NORMAL
     
@@ -185,24 +183,20 @@ class PolicyDecision:
 class PolicyViolation:
     """Record of a policy violation or compliance issue."""
     
-    # Violation details
-    violation_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    # Required fields first
     violation_type: PolicyViolationType
-    severity: PolicyPriority = PolicyPriority.NORMAL
-    
-    # Entity and policy information
-    pii_type: Optional[PIIType] = None
     violated_policy: str
-    violated_rule: Optional[str] = None
-    
-    # Context information
-    context: Optional[PolicyContext] = None
-    entity_details: Dict[str, Any] = field(default_factory=dict)
-    
-    # Violation details
     description: str
     expected_action: str
     actual_action: str
+    
+    # Optional fields with defaults
+    violation_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+    severity: PolicyPriority = PolicyPriority.NORMAL
+    pii_type: Optional[PIIType] = None
+    violated_rule: Optional[str] = None
+    context: Optional[PolicyContext] = None
+    entity_details: Dict[str, Any] = field(default_factory=dict)
     
     # Resolution
     resolved: bool = False
@@ -242,12 +236,12 @@ class PolicyViolation:
 @dataclass
 class PolicyAuditLog:
     """Audit log entry for policy-related actions."""
-    
-    # Log entry details
-    log_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+
+    # Log entry details (required fields first)
     action: str
     resource_type: str
     resource_id: str
+    log_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     
     # Actor information
     user_id: Optional[str] = None
@@ -354,19 +348,18 @@ class PolicyConfiguration(BaseModel):
 @dataclass
 class PolicyTemplate:
     """Template for creating new policies."""
-    
-    template_id: str = field(default_factory=lambda: str(uuid.uuid4()))
+
+    # Required fields first
     name: str
     description: str
     category: str  # compliance, custom, organizational
-    
-    # Template structure
     base_policy_type: str
+    created_by: str
+
+    # Fields with defaults
+    template_id: str = field(default_factory=lambda: str(uuid.uuid4()))
     default_rules: List[Dict[str, Any]] = field(default_factory=list)
     configurable_parameters: Dict[str, Any] = field(default_factory=dict)
-    
-    # Metadata
-    created_by: str
     created_at: datetime = field(default_factory=datetime.now)
     usage_count: int = 0
     

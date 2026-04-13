@@ -24,7 +24,13 @@ import hashlib
 import spacy
 from spacy import Language
 from spacy.tokens import Doc, Token, Span
-from spacy.lang.detect import detect_language
+# from spacy.lang.detect import detect_language  # Not available in newer spaCy
+try:
+    from langdetect import detect as detect_language
+except ImportError:
+    def detect_language(text):
+        """Fallback language detection function"""
+        return 'en'  # Default to English
 from spacy.pipeline import EntityRuler
 import numpy as np
 

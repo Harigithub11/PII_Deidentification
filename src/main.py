@@ -14,7 +14,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse
 
 from .api import (
-    document_router, auth_router, dashboard_router, reporting_router,
+    document_router, auth_router, dashboard_router, dashboard_stats_router, reporting_router,
     user_management_router, compliance_router, system_router, integrations_router,
     component_monitoring_router
 )
@@ -48,6 +48,7 @@ setup_security_middleware(app)
 app.include_router(auth_router)
 app.include_router(document_router)
 app.include_router(dashboard_router)
+app.include_router(dashboard_stats_router)
 app.include_router(reporting_router)
 app.include_router(user_management_router)
 app.include_router(compliance_router)
