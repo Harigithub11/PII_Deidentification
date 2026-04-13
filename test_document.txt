@@ -1,17 +1,1 @@
-Test Document for Processing
-
-This is a simple test document to verify the document processing pipeline works correctly after fixing the 'unhashable type: dict' bug.
-
-Content includes:
-- Basic text processing
-- File upload functionality  
-- Processing pipeline validation
-- Bug fix verification
-
-Patient Information (PII for testing):
-Name: John Smith
-SSN: 123-45-6789
-Email: john.smith@email.com
-Phone: (555) 123-4567
-
-This document should process successfully without errors.
+Patient Name: John Doe, Date of Birth: 1985-03-15, SSN: 123-45-6789, Phone: (555) 123-4567, Email: john.doe@example.com, Address: 123 Main St, Medical Record Number: MRN-98765

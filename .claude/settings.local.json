@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(pytest:*)",
-      "Bash(SET PYTHONPATH=%CD%)"
+      "Bash(SET PYTHONPATH=%CD%)",
+      "Bash(python:*)",
+      "Bash(pip install:*)"
     ],
     "deny": [],
     "ask": []

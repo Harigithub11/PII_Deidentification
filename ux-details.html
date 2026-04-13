@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>AI De-identification System - Comprehensive UX Design Analysis</title>
+    
+<style>
+    body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px;
+        font-size: 14px;
+    }
+
+    h1 {
+        color: #2563eb;
+        border-bottom: 3px solid #2563eb;
+        padding-bottom: 15px;
+        font-size: 32px;
+        margin-top: 40px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    h2 {
+        color: #1e40af;
+        margin-top: 35px;
+        margin-bottom: 20px;
+        font-size: 24px;
+        border-left: 4px solid #2563eb;
+        padding-left: 15px;
+    }
+
+    h3 {
+        color: #374151;
+        margin-top: 25px;
+        margin-bottom: 15px;
+        font-size: 20px;
+    }
+
+    h4 {
+        color: #4b5563;
+        margin-top: 20px;
+        margin-bottom: 10px;
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    p {
+        margin-bottom: 12px;
+        text-align: justify;
+    }
+
+    ul, ol {
+        padding-left: 25px;
+        margin-bottom: 15px;
+    }
+
+    li {
+        margin-bottom: 6px;
+    }
+
+    code {
+        background-color: #f3f4f6;
+        padding: 3px 6px;
+        border-radius: 4px;
+        font-family: "Consolas", "Monaco", "Courier New", monospace;
+        font-size: 12px;
+        color: #e11d48;
+    }
+
+    strong {
+        color: #1f2937;
+        font-weight: 700;
+    }
+
+    @media print {
+        body { font-size: 12px; padding: 20px; }
+        h1 { font-size: 28px; }
+        h2 { font-size: 20px; }
+        h3 { font-size: 18px; }
+    }
+</style>
+
+</head>
+<body>
+    <h1>AI De-identification System - Comprehensive UX Design Analysis</h1>
+<h2>Project Overview</h2>
+<p>The AI De-identification System is a comprehensive enterprise-grade application for detecting and redacting Personally Identifiable Information (PII) from documents. It features a modern Next.js frontend with a FastAPI backend, implementing advanced UI/UX patterns and enterprise-level functionality.</p>
+<h2>Application Architecture &amp; Layout</h2>
+<h3>Main Application Structure</h3>
+<ul>
+<li><strong>Framework</strong>: Next.js 15.2.4 with TypeScript</li>
+<li><strong>UI Library</strong>: shadcn/ui components built on Radix UI primitives</li>
+<li><strong>Styling</strong>: Tailwind CSS with custom design system</li>
+<li><strong>Typography</strong>: Playfair Display (headings) and Source Sans 3 (body text)</li>
+<li><strong>Theme System</strong>: Dark/light mode support with system preference detection</li>
+</ul>
+<h3>Layout Composition</h3>
+<ul>
+<li><strong>Single Page Application</strong> with tabbed navigation</li>
+<li><strong>Fixed Header</strong> at top</li>
+<li><strong>Left Sidebar Navigation</strong> (256px width)</li>
+<li><strong>Main Content Area</strong> with responsive layouts</li>
+<li><strong>Flexible Grid System</strong> adapting to screen sizes</li>
+</ul>
+<hr />
+<h2>Theme System Implementation</h2>
+<h3>Dark Theme</h3>
+<ul>
+<li><strong>Background</strong>: Slate-900 to slate-800 gradient</li>
+<li><strong>Surface Colors</strong>: Slate-900 for cards and panels</li>
+<li><strong>Text Colors</strong>:</li>
+<li>Primary: Slate-100 (white text)</li>
+<li>Secondary: Slate-300 (muted text)</li>
+<li>Tertiary: Slate-400 (placeholder text)</li>
+<li><strong>Borders</strong>: Slate-700</li>
+<li><strong>Accent Colors</strong>: Blue-600 for primary actions</li>
+</ul>
+<h3>Light Theme</h3>
+<ul>
+<li><strong>Background</strong>: Slate-50 to slate-100 gradient</li>
+<li><strong>Surface Colors</strong>: White for cards and panels</li>
+<li><strong>Text Colors</strong>:</li>
+<li>Primary: Slate-900 (dark text)</li>
+<li>Secondary: Slate-600 (muted text)</li>
+<li>Tertiary: Slate-400 (placeholder text)</li>
+<li><strong>Borders</strong>: Slate-200</li>
+<li><strong>Accent Colors</strong>: Blue-600 for primary actions</li>
+</ul>
+<h3>Theme Toggle Button</h3>
+<ul>
+<li><strong>Location</strong>: Bottom right of sidebar</li>
+<li><strong>Icons</strong>: Sun icon (light mode), Moon icon (dark mode)</li>
+<li><strong>Animation</strong>: Smooth rotate and scale transitions</li>
+<li><strong>Size</strong>: 32px x 32px clickable area</li>
+</ul>
+<hr />
+<h2>Header Component Details</h2>
+<h3>Header Layout</h3>
+<ul>
+<li><strong>Height</strong>: 64px fixed height</li>
+<li><strong>Background</strong>: White (light) / Slate-900 (dark)</li>
+<li><strong>Border</strong>: Bottom border in theme colors</li>
+</ul>
+<h3>Left Section</h3>
+<ul>
+<li><strong>Title</strong>: "PII De-identification System"</li>
+<li><strong>Typography</strong>: Large semibold text</li>
+<li><strong>Color</strong>: Adapts to theme</li>
+</ul>
+<h3>Right Section (Unauthenticated)</h3>
+<ul>
+<li><strong>Theme Toggle Button</strong>: Sun/Moon icon</li>
+<li><strong>Login Button</strong>: Outline variant with LogIn icon</li>
+<li><strong>Sign Up Button</strong>: Default variant with UserPlus icon</li>
+</ul>
+<h3>Right Section (Authenticated)</h3>
+<ul>
+<li><strong>Theme Toggle Button</strong>: Same as above</li>
+<li><strong>User Dropdown Menu</strong>:</li>
+<li><strong>Trigger</strong>: Button showing User icon + username</li>
+<li><strong>Content</strong>: "My Account" label + "Sign out" option</li>
+<li><strong>Sign Out Option</strong>: Red text with LogOut icon</li>
+</ul>
+<hr />
+<h2>Sidebar Navigation System</h2>
+<h3>Sidebar Structure</h3>
+<ul>
+<li><strong>Width</strong>: 256px fixed</li>
+<li><strong>Background</strong>: White (light) / Slate-900 (dark)</li>
+<li><strong>Border</strong>: Right border in theme colors</li>
+</ul>
+<h3>Brand Section (Top)</h3>
+<ul>
+<li><strong>Logo</strong>: Shield icon (blue-600 color)</li>
+<li><strong>App Name</strong>: "PII Shield" (Playfair font, bold)</li>
+<li><strong>Subtitle</strong>: "De-identification System" (small text)</li>
+<li><strong>Padding</strong>: 24px on all sides</li>
+<li><strong>Border</strong>: Bottom border separator</li>
+</ul>
+<h3>Navigation Menu</h3>
+<p><strong>Six Main Navigation Items</strong>:</p>
+<ol>
+<li><strong>Dashboard Tab</strong></li>
+<li><strong>Icon</strong>: BarChart3 (16px)</li>
+<li><strong>Label</strong>: "Dashboard"</li>
+<li>
+<p><strong>Active State</strong>: Blue-600 background, white text</p>
+</li>
+<li>
+<p><strong>File Upload Tab</strong></p>
+</li>
+<li><strong>Icon</strong>: Upload (16px)</li>
+<li><strong>Label</strong>: "File Upload"</li>
+<li>
+<p><strong>Active State</strong>: Blue-600 background, white text</p>
+</li>
+<li>
+<p><strong>Job Management Tab</strong></p>
+</li>
+<li><strong>Icon</strong>: Briefcase (16px)</li>
+<li><strong>Label</strong>: "Job Management"</li>
+<li>
+<p><strong>Active State</strong>: Blue-600 background, white text</p>
+</li>
+<li>
+<p><strong>Compliance Tab</strong></p>
+</li>
+<li><strong>Icon</strong>: FileCheck (16px)</li>
+<li><strong>Label</strong>: "Compliance"</li>
+<li>
+<p><strong>Active State</strong>: Blue-600 background, white text</p>
+</li>
+<li>
+<p><strong>Monitoring Tab</strong></p>
+</li>
+<li><strong>Icon</strong>: Activity (16px)</li>
+<li><strong>Label</strong>: "Monitoring"</li>
+<li>
+<p><strong>Active State</strong>: Blue-600 background, white text</p>
+</li>
+<li>
+<p><strong>Settings Tab</strong></p>
+</li>
+<li><strong>Icon</strong>: Settings (16px)</li>
+<li><strong>Label</strong>: "Settings"</li>
+<li><strong>Active State</strong>: Blue-600 background, white text</li>
+</ol>
+<h3>Navigation Button Styling</h3>
+<ul>
+<li><strong>Height</strong>: 44px per button</li>
+<li><strong>Padding</strong>: 12px horizontal</li>
+<li><strong>Border Radius</strong>: 6px</li>
+<li><strong>Gap</strong>: 12px between icon and text</li>
+<li><strong>Hover State</strong>: Light gray background</li>
+<li><strong>Active State</strong>: Blue background with white text</li>
+</ul>
+<h3>Bottom Status Section</h3>
+<ul>
+<li><strong>Border</strong>: Top border separator</li>
+<li><strong>Status Text</strong>: "System Status: Online"</li>
+<li><strong>Health Indicator</strong>: "All services operational" (green text)</li>
+<li><strong>Theme Toggle</strong>: Positioned bottom right</li>
+</ul>
+<hr />
+<h2>Dashboard Overview Page</h2>
+<h3>Page Header</h3>
+<ul>
+<li><strong>Title</strong>: "Dashboard Overview" (Playfair font, 3xl, bold)</li>
+<li><strong>Description</strong>: "Monitor your de-identification system performance and compliance status"</li>
+</ul>
+<h3>Four Stat Cards (Top Row)</h3>
+<ol>
+<li><strong>Documents Processed Card</strong></li>
+<li><strong>Icon</strong>: FileText (chart-1 color)</li>
+<li><strong>Title</strong>: "Documents Processed"</li>
+<li><strong>Value</strong>: Dynamic number with localization</li>
+<li>
+<p><strong>Change Indicator</strong>: "+12% from last month" (green text)</p>
+</li>
+<li>
+<p><strong>Active Jobs Card</strong></p>
+</li>
+<li><strong>Icon</strong>: Clock (chart-2 color)</li>
+<li><strong>Title</strong>: "Active Jobs"</li>
+<li><strong>Value</strong>: Dynamic count</li>
+<li>
+<p><strong>Change Indicator</strong>: "+3 from last month" (green text)</p>
+</li>
+<li>
+<p><strong>Compliance Score Card</strong></p>
+</li>
+<li><strong>Icon</strong>: Shield (chart-3 color)</li>
+<li><strong>Title</strong>: "Compliance Score"</li>
+<li><strong>Value</strong>: Percentage format</li>
+<li>
+<p><strong>Change Indicator</strong>: "+0.2% from last month" (green text)</p>
+</li>
+<li>
+<p><strong>PII Entities Found Card</strong></p>
+</li>
+<li><strong>Icon</strong>: AlertTriangle (chart-4 color)</li>
+<li><strong>Title</strong>: "PII Entities Found"</li>
+<li><strong>Value</strong>: Dynamic number with localization</li>
+<li><strong>Change Indicator</strong>: "+8% from last month" (green text)</li>
+</ol>
+<h3>Two Main Content Cards (Second Row)</h3>
+<ol>
+<li><strong>Processing Metrics Card</strong></li>
+<li><strong>Title</strong>: "Processing Metrics"</li>
+<li><strong>Description</strong>: "Document processing trends over time"</li>
+<li><strong>Content</strong>: Area chart showing processing data over time</li>
+<li><strong>Chart Type</strong>: Recharts Area Chart</li>
+<li><strong>Data Lines</strong>:<ul>
+<li>Documents Processed (chart-1 color with gradient)</li>
+<li>PII Detected (chart-2 color with gradient)</li>
+</ul>
+</li>
+<li><strong>Time Range</strong>: 8 hours (09:00 to 16:00)</li>
+<li><strong>Height</strong>: 300px</li>
+<li>
+<p><strong>Features</strong>: Cartesian grid, tooltips, responsive</p>
+</li>
+<li>
+<p><strong>System Status Card</strong></p>
+</li>
+<li><strong>Title</strong>: "System Status"</li>
+<li><strong>Description</strong>: "Current system health and performance"</li>
+<li><strong>Three Progress Bars</strong>:<ul>
+<li><strong>CPU Usage</strong>: Percentage with progress bar</li>
+<li><strong>Memory Usage</strong>: Percentage with progress bar</li>
+<li><strong>Storage Usage</strong>: Percentage with progress bar</li>
+</ul>
+</li>
+<li><strong>Status Indicator</strong>: CheckCircle icon + system status text</li>
+<li><strong>Progress Bar Height</strong>: 8px</li>
+</ol>
+<h3>Recent Activity Card (Bottom)</h3>
+<ul>
+<li><strong>Title</strong>: "Recent Activity"</li>
+<li><strong>Description</strong>: "Latest system events and processing updates"</li>
+<li><strong>Activity Items</strong>: 4 recent activities displayed</li>
+<li><strong>Each Activity Shows</strong>:</li>
+<li>Avatar with activity type icon</li>
+<li>Activity message text</li>
+<li>User and timestamp</li>
+<li>Status badge (completed/processing/alert)</li>
+</ul>
+<h3>Loading State</h3>
+<ul>
+<li><strong>Loader</strong>: Spinner icon with "Loading dashboard data..." text</li>
+<li><strong>Centered</strong>: In flex container with 384px min height</li>
+</ul>
+<h3>Error State</h3>
+<ul>
+<li><strong>Background</strong>: Destructive color with transparency</li>
+<li><strong>Border</strong>: Destructive color</li>
+<li><strong>Icon</strong>: AlertTriangle (destructive color)</li>
+<li><strong>Title</strong>: "Error loading dashboard"</li>
+<li><strong>Message</strong>: Specific error description</li>
+</ul>
+<hr />
+<h2>File Upload Page</h2>
+<h3>Page Header</h3>
+<ul>
+<li><strong>Title</strong>: "File Upload" (Playfair font, 3xl, bold)</li>
+<li><strong>Description</strong>: "Upload documents for PII detection and de-identification"</li>
+</ul>
+<h3>Two-Step Process</h3>
+<h4>Step 1: Select Files</h4>
+<p><strong>Main Upload Area (Left Column)</strong>
+- <strong>Drag &amp; Drop Zone</strong>:
+  - Large dashed border (2px)
+  - Upload icon (48px)
+  - "Drag &amp; drop files here, or click to select" text
+  - "Maximum file size: 50MB per file" subtitle
+  - <strong>Active State</strong>: Accent border and background when dragging
+  - <strong>Supported Formats</strong>: PDF, DOC, DOCX, TXT, JPG, PNG, TIFF</p>
+<p><strong>File List Card</strong> (Shows when files uploaded)
+- <strong>Title</strong>: "Uploaded Files (X)" with dynamic count
+- <strong>Description</strong>: "Monitor upload progress and file status"
+- <strong>File Items Display</strong>:
+  - File type icon (FileText/ImageIcon)
+  - File name and size
+  - Progress bar (8px height)
+  - Status badge with icons:
+    - <strong>Completed</strong>: CheckCircle icon, default variant
+    - <strong>Uploading</strong>: Loader2 spinning icon, secondary variant
+    - <strong>Processing</strong>: Loader2 spinning icon, secondary variant
+    - <strong>Error</strong>: Destructive variant
+  - Remove button (X icon)</p>
+<h4>Step 2: Processing Results</h4>
+<p><strong>Results Display</strong>:
+- <strong>Success Message</strong>: "Processing Complete!" (green text)
+- <strong>Description</strong>: "Your documents have been processed and are ready for download"
+- <strong>Processed Files</strong>: Green background cards with:
+  - File icon and name
+  - "Processed and ready for download" status
+  - "Download Redacted" button</p>
+<p><strong>Process More Files Button</strong>: Full width, outline variant</p>
+<h3>Processing Options Panel (Right Column)</h3>
+<p><strong>Processing Options Card</strong>:
+- <strong>Title</strong>: "Processing Options"
+- <strong>Description</strong>: "Configure de-identification settings"</p>
+<p><strong>Three Dropdown Selectors</strong>:</p>
+<ol>
+<li><strong>Redaction Method Dropdown</strong>:</li>
+<li>Blackout</li>
+<li>Blur</li>
+<li>Pixelation</li>
+<li>
+<p>Text Replacement</p>
+</li>
+<li>
+<p><strong>Output Format Dropdown</strong>:</p>
+</li>
+<li>Same as input</li>
+<li>PDF</li>
+<li>
+<p>DOCX</p>
+</li>
+<li>
+<p><strong>Detection Sensitivity Dropdown</strong>:</p>
+</li>
+<li>High (Recommended)</li>
+<li>Medium</li>
+<li>Low</li>
+</ol>
+<p><strong>Supported PII Types Card</strong>:
+- <strong>Title</strong>: "Supported PII Types"
+- <strong>Eight Badge Elements</strong> (outline variant):
+  - SSN
+  - Email
+  - Phone
+  - Address
+  - Credit Card
+  - Passport
+  - Driver License
+  - Medical ID</p>
+<p><strong>Start Processing Button</strong> (Bottom):
+- <strong>Size</strong>: Large, full width
+- <strong>State</strong>: Disabled until files completed
+- <strong>Loading State</strong>: Spinner + "Processing..." text
+- <strong>Default Text</strong>: "Start Processing"</p>
+<h3>Error Handling</h3>
+<ul>
+<li><strong>Alert Component</strong>: Destructive variant with AlertTriangle icon</li>
+<li><strong>Positioning</strong>: Top of page when errors occur</li>
+</ul>
+<hr />
+<h2>Job Management Page</h2>
+<h3>Page Header</h3>
+<ul>
+<li><strong>Title</strong>: "Job Management" (Playfair font, 3xl, bold)</li>
+<li><strong>Description</strong>: "Monitor and manage de-identification jobs"</li>
+<li><strong>New Batch Job Button</strong>: Primary button with Play icon</li>
+</ul>
+<h3>Main Jobs Table Card</h3>
+<ul>
+<li><strong>Title</strong>: "Active Jobs"</li>
+<li><strong>Description</strong>: "Track progress and manage processing jobs"</li>
+<li><strong>Search Bar</strong>:</li>
+<li>Search icon (16px)</li>
+<li>"Search jobs..." placeholder</li>
+<li>Width: 256px</li>
+</ul>
+<h3>Jobs Table Structure</h3>
+<p><strong>Table Headers</strong> (8 columns):
+1. <strong>Job ID</strong>: Monospace font
+2. <strong>Name</strong>: Medium font weight
+3. <strong>Status</strong>: Badge component
+4. <strong>Progress</strong>: Progress bar + percentage
+5. <strong>Files</strong>: File count
+6. <strong>PII Found</strong>: Entity count
+7. <strong>Priority</strong>: Badge component
+8. <strong>Created</strong>: Timestamp
+9. <strong>Actions</strong>: Dropdown menu</p>
+<p><strong>Status Badge Colors</strong>:
+- <strong>Completed</strong>: Default variant
+- <strong>Processing</strong>: Secondary variant
+- <strong>Queued</strong>: Outline variant
+- <strong>Failed</strong>: Destructive variant</p>
+<p><strong>Priority Badge Colors</strong>:
+- <strong>High</strong>: Destructive variant
+- <strong>Medium</strong>: Secondary variant
+- <strong>Low</strong>: Outline variant</p>
+<p><strong>Progress Display</strong>:
+- <strong>Progress Bar</strong>: 64px width, 8px height
+- <strong>Percentage</strong>: Small text beside bar</p>
+<p><strong>Actions Dropdown Menu</strong>:
+- <strong>Trigger</strong>: MoreHorizontal icon button
+- <strong>Options</strong>:
+  - Resume (Play icon)
+  - Pause (Pause icon)
+  - Download Results (Download icon)
+  - Delete (Trash2 icon, destructive color)</p>
+<h3>Three Status Cards (Bottom Row)</h3>
+<ol>
+<li><strong>Queue Status Card</strong>:</li>
+<li><strong>Title</strong>: "Queue Status"</li>
+<li>
+<p><strong>Metrics</strong>:</p>
+<ul>
+<li>"Processing: 2 jobs"</li>
+<li>"Queued: 5 jobs"</li>
+<li>"Completed Today: 12 jobs"</li>
+</ul>
+</li>
+<li>
+<p><strong>Processing Stats Card</strong>:</p>
+</li>
+<li><strong>Title</strong>: "Processing Stats"</li>
+<li>
+<p><strong>Metrics</strong>:</p>
+<ul>
+<li>"Avg. Processing Time: 4.2 min"</li>
+<li>"Success Rate: 98.5%"</li>
+<li>"Total PII Redacted: 15,432"</li>
+</ul>
+</li>
+<li>
+<p><strong>System Load Card</strong>:</p>
+</li>
+<li><strong>Title</strong>: "System Load"</li>
+<li><strong>Two Progress Sections</strong>:<ul>
+<li><strong>CPU Usage</strong>: "67%" with progress bar</li>
+<li><strong>Memory</strong>: "45%" with progress bar</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2>Compliance Dashboard Page</h2>
+<h3>Page Header</h3>
+<ul>
+<li><strong>Title</strong>: "Compliance Dashboard" (Playfair font, 3xl, bold)</li>
+<li><strong>Description</strong>: "Monitor regulatory compliance and audit trails"</li>
+</ul>
+<h3>Four Compliance Score Cards (Top Row)</h3>
+<ol>
+<li><strong>GDPR Card</strong>:</li>
+<li><strong>Icon</strong>: Shield (muted)</li>
+<li><strong>Score</strong>: "98%"</li>
+<li><strong>Status</strong>: CheckCircle icon + "compliant" badge (default variant)</li>
+<li>
+<p><strong>Last Audit</strong>: "2024-01-10"</p>
+</li>
+<li>
+<p><strong>HIPAA Card</strong>:</p>
+</li>
+<li><strong>Icon</strong>: Shield (muted)</li>
+<li><strong>Score</strong>: "96%"</li>
+<li><strong>Status</strong>: CheckCircle icon + "compliant" badge (default variant)</li>
+<li>
+<p><strong>Last Audit</strong>: "2024-01-08"</p>
+</li>
+<li>
+<p><strong>PCI-DSS Card</strong>:</p>
+</li>
+<li><strong>Icon</strong>: Shield (muted)</li>
+<li><strong>Score</strong>: "94%"</li>
+<li><strong>Status</strong>: CheckCircle icon + "compliant" badge (default variant)</li>
+<li>
+<p><strong>Last Audit</strong>: "2024-01-05"</p>
+</li>
+<li>
+<p><strong>SOX Card</strong>:</p>
+</li>
+<li><strong>Icon</strong>: Shield (muted)</li>
+<li><strong>Score</strong>: "89%"</li>
+<li><strong>Status</strong>: AlertTriangle icon + "warning" badge (secondary variant)</li>
+<li><strong>Last Audit</strong>: "2024-01-03"</li>
+</ol>
+<h3>Tabbed Content Area</h3>
+<p><strong>Four Main Tabs</strong>:
+1. <strong>Overview Tab</strong> (default active)
+2. <strong>GDPR Tab</strong>
+3. <strong>HIPAA Tab</strong>
+4. <strong>Audit Tab</strong></p>
+<h4>Overview Tab Content</h4>
+<p><strong>Two-Column Layout</strong>:</p>
+<ol>
+<li><strong>Compliance Trends Card</strong>:</li>
+<li><strong>Title</strong>: "Compliance Trends"</li>
+<li><strong>Description</strong>: "Monthly compliance scores across frameworks"</li>
+<li>
+<p><strong>Content</strong>: ComplianceChart component</p>
+</li>
+<li>
+<p><strong>Risk Assessment Card</strong>:</p>
+</li>
+<li><strong>Title</strong>: "Risk Assessment"</li>
+<li><strong>Description</strong>: "Current compliance risks and recommendations"</li>
+<li><strong>Four Risk Metrics</strong>:<ul>
+<li><strong>Data Retention Compliance</strong>: "Low Risk" (green) - 95% progress</li>
+<li><strong>Access Control</strong>: "Low Risk" (green) - 92% progress</li>
+<li><strong>Data Processing Logs</strong>: "Medium Risk" (yellow) - 78% progress</li>
+<li><strong>Breach Response</strong>: "Low Risk" (green) - 88% progress</li>
+</ul>
+</li>
+</ol>
+<h4>GDPR Tab Content</h4>
+<p><strong>Two-Column Layout</strong>:</p>
+<ol>
+<li><strong>GDPR Requirements Card</strong>:</li>
+<li><strong>Title</strong>: "GDPR Requirements"</li>
+<li>
+<p><strong>Four Requirements with Status Icons</strong>:</p>
+<ul>
+<li>Data Subject Rights (CheckCircle - green)</li>
+<li>Consent Management (CheckCircle - green)</li>
+<li>Data Protection Impact Assessment (CheckCircle - green)</li>
+<li>Breach Notification (AlertTriangle - yellow)</li>
+</ul>
+</li>
+<li>
+<p><strong>Data Processing Activities Card</strong>:</p>
+</li>
+<li><strong>Title</strong>: "Data Processing Activities"</li>
+<li><strong>Four Metrics</strong>:<ul>
+<li>"Records Processed (30 days): 2,847"</li>
+<li>"Data Subject Requests: 12"</li>
+<li>"Consent Withdrawals: 3"</li>
+<li>"Data Exports Provided: 8"</li>
+</ul>
+</li>
+</ol>
+<h4>HIPAA Tab Content</h4>
+<p><strong>Two-Column Layout</strong>:</p>
+<ol>
+<li><strong>HIPAA Safeguards Card</strong>:</li>
+<li><strong>Title</strong>: "HIPAA Safeguards"</li>
+<li>
+<p><strong>Four Safeguards with CheckCircle Icons</strong>:</p>
+<ul>
+<li>Administrative Safeguards</li>
+<li>Physical Safeguards</li>
+<li>Technical Safeguards</li>
+<li>Business Associate Agreements</li>
+</ul>
+</li>
+<li>
+<p><strong>PHI Processing Card</strong>:</p>
+</li>
+<li><strong>Title</strong>: "PHI Processing"</li>
+<li><strong>Four Metrics</strong>:<ul>
+<li>"PHI Records De-identified: 1,234"</li>
+<li>"Safe Harbor Method Applied: 98.5%"</li>
+<li>"Access Logs Maintained: 100%"</li>
+<li>"Encryption Status: Active"</li>
+</ul>
+</li>
+</ol>
+<h4>Audit Trail Tab Content</h4>
+<p><strong>Audit Trail Card</strong>:
+- <strong>Title</strong>: "Audit Trail"
+- <strong>Description</strong>: "Comprehensive log of all system activities and compliance events"
+- <strong>Four Audit Entries</strong>:
+  1. <strong>Data Processing Request</strong> by Dr. Sarah Johnson
+     - Status: Approved (CheckCircle - green)
+     - Details: "Processed 45 medical records for de-identification"
+     - Timestamp: "2024-01-15 14:30:22"</p>
+<ol>
+<li>
+<p><strong>Data Subject Access Request</strong> by John Doe</p>
+<ul>
+<li>Status: Completed (CheckCircle - green)</li>
+<li>Details: "Provided personal data export as requested"</li>
+<li>Timestamp: "2024-01-15 13:15:10"</li>
+</ul>
+</li>
+<li>
+<p><strong>Data Retention Policy Applied</strong> by System</p>
+<ul>
+<li>Status: Automated (Clock - blue)</li>
+<li>Details: "Archived documents older than 7 years"</li>
+<li>Timestamp: "2024-01-15 12:00:00"</li>
+</ul>
+</li>
+<li>
+<p><strong>Breach Assessment</strong> by Security Team</p>
+<ul>
+<li>Status: Resolved (CheckCircle - green)</li>
+<li>Details: "False positive - no actual breach detected"</li>
+<li>Timestamp: "2024-01-15 10:45:33"</li>
+</ul>
+</li>
+</ol>
+<hr />
+<h2>System Monitoring Page</h2>
+<h3>Page Header</h3>
+<ul>
+<li><strong>Title</strong>: "System Monitoring" (Playfair font, 3xl, bold)</li>
+<li><strong>Description</strong>: "Real-time system health and performance monitoring"</li>
+</ul>
+<h3>Four System Resource Cards (Top Row)</h3>
+<ol>
+<li><strong>CPU Usage Card</strong>:</li>
+<li><strong>Icon</strong>: Cpu (muted)</li>
+<li><strong>Title</strong>: "CPU Usage"</li>
+<li><strong>Value</strong>: "67%"</li>
+<li><strong>Progress Bar</strong>: 67% filled, 8px height</li>
+<li>
+<p><strong>Detail</strong>: "8 cores active"</p>
+</li>
+<li>
+<p><strong>Memory Usage Card</strong>:</p>
+</li>
+<li><strong>Icon</strong>: Server (muted)</li>
+<li><strong>Title</strong>: "Memory Usage"</li>
+<li><strong>Value</strong>: "45%"</li>
+<li><strong>Progress Bar</strong>: 45% filled, 8px height</li>
+<li>
+<p><strong>Detail</strong>: "18.2 GB / 32 GB"</p>
+</li>
+<li>
+<p><strong>Storage Card</strong>:</p>
+</li>
+<li><strong>Icon</strong>: HardDrive (muted)</li>
+<li><strong>Title</strong>: "Storage"</li>
+<li><strong>Value</strong>: "78%"</li>
+<li><strong>Progress Bar</strong>: 78% filled, 8px height</li>
+<li>
+<p><strong>Detail</strong>: "780 GB / 1 TB"</p>
+</li>
+<li>
+<p><strong>Network I/O Card</strong>:</p>
+</li>
+<li><strong>Icon</strong>: Network (muted)</li>
+<li><strong>Title</strong>: "Network I/O"</li>
+<li><strong>Value</strong>: "234 MB/s"</li>
+<li><strong>Detail</strong>: "↑ 156 MB/s ↓ 78 MB/s"</li>
+</ol>
+<h3>Two Main Content Cards (Second Row)</h3>
+<ol>
+<li><strong>Service Health Card</strong>:</li>
+<li><strong>Title</strong>: "Service Health"</li>
+<li><strong>Description</strong>: "Status of all system components"</li>
+<li>
+<p><strong>Six Service Status Items</strong>:</p>
+<ol>
+<li>
+<p><strong>API Gateway</strong>:</p>
+<ul>
+<li>Status: Healthy (CheckCircle - green)</li>
+<li>Uptime: "99.9%"</li>
+<li>Response Time: "45ms"</li>
+<li>Badge: "healthy" (default variant)</li>
+</ul>
+</li>
+<li>
+<p><strong>PII Detection Engine</strong>:</p>
+<ul>
+<li>Status: Healthy (CheckCircle - green)</li>
+<li>Uptime: "99.8%"</li>
+<li>Response Time: "120ms"</li>
+<li>Badge: "healthy" (default variant)</li>
+</ul>
+</li>
+<li>
+<p><strong>Document Processor</strong>:</p>
+<ul>
+<li>Status: Warning (AlertTriangle - yellow)</li>
+<li>Uptime: "98.5%"</li>
+<li>Response Time: "340ms"</li>
+<li>Badge: "warning" (secondary variant)</li>
+</ul>
+</li>
+<li>
+<p><strong>Database</strong>:</p>
+<ul>
+<li>Status: Healthy (CheckCircle - green)</li>
+<li>Uptime: "100%"</li>
+<li>Response Time: "12ms"</li>
+<li>Badge: "healthy" (default variant)</li>
+</ul>
+</li>
+<li>
+<p><strong>File Storage</strong>:</p>
+<ul>
+<li>Status: Healthy (CheckCircle - green)</li>
+<li>Uptime: "99.9%"</li>
+<li>Response Time: "25ms"</li>
+<li>Badge: "healthy" (default variant)</li>
+</ul>
+</li>
+<li>
+<p><strong>Authentication</strong>:</p>
+<ul>
+<li>Status: Healthy (CheckCircle - green)</li>
+<li>Uptime: "100%"</li>
+<li>Response Time: "18ms"</li>
+<li>Badge: "healthy" (default variant)</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p><strong>System Metrics Card</strong>:</p>
+</li>
+<li><strong>Title</strong>: "System Metrics"</li>
+<li><strong>Description</strong>: "Performance trends over the last 24 hours"</li>
+<li><strong>Content</strong>: SystemMetrics chart component</li>
+</ol>
+<h3>Recent Alerts Card (Bottom)</h3>
+<ul>
+<li><strong>Title</strong>: "Recent Alerts"</li>
+<li><strong>Description</strong>: "System alerts and notifications"</li>
+<li>
+<p><strong>Three Alert Items</strong>:</p>
+</li>
+<li>
+<p><strong>Warning Alert</strong>:</p>
+<ul>
+<li>Icon: AlertTriangle (yellow)</li>
+<li>Message: "Document Processor response time above threshold"</li>
+<li>Service: "Document Processor"</li>
+<li>Time: "2 minutes ago"</li>
+<li>Badge: "warning" (outline variant)</li>
+</ul>
+</li>
+<li>
+<p><strong>Info Alert</strong>:</p>
+<ul>
+<li>Icon: CheckCircle (blue)</li>
+<li>Message: "Scheduled maintenance completed successfully"</li>
+<li>Service: "System"</li>
+<li>Time: "1 hour ago"</li>
+<li>Badge: "info" (outline variant)</li>
+</ul>
+</li>
+<li>
+<p><strong>Resolved Alert</strong>:</p>
+<ul>
+<li>Icon: CheckCircle (green)</li>
+<li>Message: "Database connection pool optimized"</li>
+<li>Service: "Database"</li>
+<li>Time: "3 hours ago"</li>
+<li>Badge: "resolved" (outline variant)</li>
+</ul>
+</li>
+</ul>
+<hr />
+<h2>Settings Page</h2>
+<h3>Page Header</h3>
+<ul>
+<li><strong>Title</strong>: "Settings" (Playfair font, 3xl, bold)</li>
+<li><strong>Description</strong>: "Configure system preferences and policies"</li>
+</ul>
+<h3>Five-Tab Interface</h3>
+<p><strong>Tab Navigation Bar</strong>:
+1. <strong>General Tab</strong> (default active)
+2. <strong>Processing Tab</strong>
+3. <strong>Compliance Tab</strong>
+4. <strong>Security Tab</strong>
+5. <strong>Notifications Tab</strong></p>
+<h3>General Tab Content</h3>
+<p><strong>System Configuration Card</strong>:
+- <strong>Title</strong>: "System Configuration"
+- <strong>Description</strong>: "Basic system settings and preferences"</p>
+<p><strong>Form Fields</strong>:
+1. <strong>Organization Name</strong>:
+   - Input field with current value
+   - Width: Half column</p>
+<ol>
+<li><strong>Timezone Dropdown</strong>:</li>
+<li>Options: UTC, Eastern Time, Pacific Time</li>
+<li>Width: Half column</li>
+</ol>
+<p><strong>Settings Toggles</strong>:
+1. <strong>Auto-save Settings Toggle</strong>:
+   - Label: "Auto-save Settings"
+   - Description: "Automatically save configuration changes"
+   - Switch component</p>
+<ol>
+<li><strong>Dark Mode Toggle</strong>:</li>
+<li>Label: "Dark Mode"</li>
+<li>Description: "Use dark theme for the interface"</li>
+<li>Switch component</li>
+</ol>
+<h3>Processing Tab Content</h3>
+<p><strong>Processing Configuration Card</strong>:
+- <strong>Title</strong>: "Processing Configuration"
+- <strong>Description</strong>: "Configure document processing and PII detection settings"</p>
+<p><strong>Dropdown Settings</strong>:
+1. <strong>Default Redaction Method</strong>:
+   - Options: Blackout, Blur, Pixelation, Text Replacement
+   - Width: Half column</p>
+<ol>
+<li><strong>Detection Sensitivity</strong>:</li>
+<li>Options: Low, Medium, High</li>
+<li>Width: Half column</li>
+</ol>
+<p><strong>PII Entity Types Section</strong>:
+- <strong>Label</strong>: "PII Entity Types"
+- <strong>12 Entity Toggles</strong> (3-column grid):
+  - SSN, Email, Phone, Address
+  - Credit Card, Passport, Driver License, Medical ID
+  - Bank Account, Tax ID, Insurance Number, Date of Birth
+- <strong>Each Toggle</strong>: Switch + entity name label</p>
+<p><strong>Batch Processing Section</strong>:
+1. <strong>Batch Processing Toggle</strong>:
+   - Label: "Batch Processing"
+   - Description: "Enable automatic batch processing for multiple files"</p>
+<ol>
+<li><strong>Max Batch Size Input</strong>:</li>
+<li>Number input field</li>
+<li>
+<p>Width: Half column</p>
+</li>
+<li>
+<p><strong>Concurrent Jobs Input</strong>:</p>
+</li>
+<li>Number input field</li>
+<li>Width: Half column</li>
+</ol>
+<h3>Compliance Tab Content</h3>
+<p><strong>Compliance Policies Card</strong>:
+- <strong>Title</strong>: "Compliance Policies"
+- <strong>Description</strong>: "Configure regulatory compliance settings"</p>
+<p><strong>Three Compliance Toggles</strong>:
+1. <strong>GDPR Compliance</strong>:
+   - Label: "GDPR Compliance"
+   - Description: "Enable GDPR data protection features"
+   - Badge: "Active"/"Inactive" with color coding
+   - Switch component</p>
+<ol>
+<li><strong>HIPAA Compliance</strong>:</li>
+<li>Label: "HIPAA Compliance"</li>
+<li>Description: "Enable HIPAA healthcare data protection"</li>
+<li>Badge: "Active"/"Inactive" with color coding</li>
+<li>
+<p>Switch component</p>
+</li>
+<li>
+<p><strong>PCI-DSS Compliance</strong>:</p>
+</li>
+<li>Label: "PCI-DSS Compliance"</li>
+<li>Description: "Enable payment card data protection"</li>
+<li>Badge: "Active"/"Inactive" with color coding</li>
+<li>Switch component</li>
+</ol>
+<p><strong>Data Retention Policy Section</strong>:
+- <strong>Label</strong>: "Data Retention Policy"</p>
+<p><strong>Two Input Fields</strong>:
+1. <strong>Retention Period</strong>:
+   - Label: "Retention Period (days)"
+   - Number input
+   - Width: Half column</p>
+<ol>
+<li><strong>Archive After</strong>:</li>
+<li>Label: "Archive After (days)"</li>
+<li>Number input</li>
+<li>Width: Half column</li>
+</ol>
+<p><strong>Audit Logging Toggle</strong>:
+- Label: "Audit Logging"
+- Description: "Maintain detailed audit trails for compliance"
+- Switch component</p>
+<h3>Security Tab Content</h3>
+<p><strong>Security Settings Card</strong>:
+- <strong>Title</strong>: "Security Settings"
+- <strong>Description</strong>: "Configure authentication and security policies"</p>
+<p><strong>Security Toggles</strong>:
+1. <strong>Two-Factor Authentication</strong>:
+   - Label: "Two-Factor Authentication"
+   - Description: "Require 2FA for all user accounts"
+   - Switch component</p>
+<ol>
+<li><strong>Session Timeout</strong>:</li>
+<li>Label: "Session Timeout"</li>
+<li>Description: "Automatically log out inactive users"</li>
+<li>Switch component</li>
+</ol>
+<p><strong>Security Parameters</strong>:
+1. <strong>Session Duration</strong>:
+   - Label: "Session Duration (minutes)"
+   - Number input
+   - Width: Half column</p>
+<ol>
+<li><strong>Max Login Attempts</strong>:</li>
+<li>Label: "Max Login Attempts"</li>
+<li>Number input</li>
+<li>Width: Half column</li>
+</ol>
+<p><strong>Password Policy Section</strong>:
+- <strong>Label</strong>: "Password Policy"</p>
+<p><strong>Four Password Requirement Toggles</strong>:
+1. <strong>Minimum 8 characters</strong> (Switch + label)
+2. <strong>Require uppercase letters</strong> (Switch + label)
+3. <strong>Require special characters</strong> (Switch + label)
+4. <strong>Require numbers</strong> (Switch + label)</p>
+<h3>Notifications Tab Content</h3>
+<p><strong>Notification Settings Card</strong>:
+- <strong>Title</strong>: "Notification Settings"
+- <strong>Description</strong>: "Configure system alerts and notifications"</p>
+<p><strong>Four Notification Toggles</strong>:
+1. <strong>Email Notifications</strong>:
+   - Label: "Email Notifications"
+   - Description: "Receive notifications via email"
+   - Switch component</p>
+<ol>
+<li><strong>Job Completion Alerts</strong>:</li>
+<li>Label: "Job Completion Alerts"</li>
+<li>Description: "Get notified when processing jobs complete"</li>
+<li>
+<p>Switch component</p>
+</li>
+<li>
+<p><strong>System Health Alerts</strong>:</p>
+</li>
+<li>Label: "System Health Alerts"</li>
+<li>Description: "Receive alerts for system issues"</li>
+<li>
+<p>Switch component</p>
+</li>
+<li>
+<p><strong>Compliance Alerts</strong>:</p>
+</li>
+<li>Label: "Compliance Alerts"</li>
+<li>Description: "Get notified about compliance issues"</li>
+<li>Switch component</li>
+</ol>
+<p><strong>Email Configuration</strong>:
+- <strong>Label</strong>: "Notification Email"
+- <strong>Input</strong>: Email type field for notification address</p>
+<h3>Settings Page Footer</h3>
+<p><strong>Two Action Buttons</strong>:
+1. <strong>Reset to Defaults Button</strong>:
+   - Variant: Outline
+   - Position: Right side
+   - Disabled when loading</p>
+<ol>
+<li><strong>Save Changes Button</strong>:</li>
+<li>Variant: Primary (orange when changes detected)</li>
+<li>Text: "Save Changes" or "Save Changes *" when modified</li>
+<li>Position: Right side</li>
+<li>Disabled when loading or no changes</li>
+</ol>
+<h3>Settings State Management</h3>
+<ul>
+<li><strong>Loading State</strong>: Shows "Loading settings..." message</li>
+<li><strong>Change Detection</strong>: Tracks unsaved modifications</li>
+<li><strong>Error Handling</strong>: Toast notifications for errors</li>
+<li><strong>Success Feedback</strong>: Toast confirmation on save</li>
+</ul>
+<hr />
+<h2>Authentication Pages</h2>
+<h3>Login Page</h3>
+<p><strong>Page Layout</strong>:
+- <strong>Background</strong>: Gradient from slate-50 to slate-100 (light) / slate-900 to slate-800 (dark)
+- <strong>Container</strong>: Centered, max-width 448px
+- <strong>Padding</strong>: 16px</p>
+<p><strong>Header Section</strong>:
+- <strong>Logo</strong>: Shield icon in blue background circle
+- <strong>Title</strong>: "PII De-identification System" (2xl, bold)
+- <strong>Subtitle</strong>: "Secure access to your data protection platform"</p>
+<p><strong>Login Card</strong>:
+- <strong>Title</strong>: "Sign in to your account" (xl)
+- <strong>Description</strong>: "Enter your credentials to access the dashboard"</p>
+<p><strong>Form Fields</strong>:
+1. <strong>Username Input</strong>:
+   - Label: "Username"
+   - Placeholder: "E-Hari"
+   - Height: 44px
+   - Required field</p>
+<ol>
+<li><strong>Password Input</strong>:</li>
+<li>Label: "Password"</li>
+<li>Placeholder: "Enter your password"</li>
+<li>Height: 44px</li>
+<li><strong>Show/Hide Toggle</strong>: Eye/EyeOff icon button (right side)</li>
+<li>Required field</li>
+</ol>
+<p><strong>Form Options</strong>:
+- <strong>Remember Me Checkbox</strong>: Small checkbox with label
+- <strong>Forgot Password Link</strong>: Blue text, right-aligned</p>
+<p><strong>Login Button</strong>:
+- <strong>Width</strong>: Full width
+- <strong>Height</strong>: 44px
+- <strong>Background</strong>: Blue-600
+- <strong>Loading State</strong>: Spinner + "Signing in..." text
+- <strong>Default State</strong>: Lock icon + "Sign in" text</p>
+<p><strong>Registration Link</strong>:
+- Text: "Don't have an account? Create one here"
+- "Create one here" is blue linked text</p>
+<p><strong>Demo Credentials Card</strong>:
+- <strong>Background</strong>: Amber-50 (light) / amber-950/20 (dark)
+- <strong>Border</strong>: Amber-200 (light) / amber-800 (dark)
+- <strong>Content</strong>: "Demo Credentials"
+- <strong>Credentials</strong>: "Username: E-Hari | Password: Muxbx@hari1"</p>
+<p><strong>Error Handling</strong>:
+- <strong>Alert Component</strong>: Destructive variant at top of form
+- <strong>Error Messages</strong>: Network errors and login failures</p>
+<h3>Register Page</h3>
+<ul>
+<li>Similar structure to login page</li>
+<li>Additional fields for email, full name</li>
+<li>Different heading and call-to-action text</li>
+</ul>
+<hr />
+<h2>Interactive Elements &amp; Micro-interactions</h2>
+<h3>Button States</h3>
+<ul>
+<li><strong>Default</strong>: Base styling with theme colors</li>
+<li><strong>Hover</strong>: Subtle background color change</li>
+<li><strong>Active</strong>: Pressed state with color darkening</li>
+<li><strong>Disabled</strong>: Reduced opacity and no pointer events</li>
+<li><strong>Loading</strong>: Spinner animation with loading text</li>
+</ul>
+<h3>Form Elements</h3>
+<ul>
+<li><strong>Input Fields</strong>:</li>
+<li>Border color changes on focus</li>
+<li>Placeholder text fades out on focus</li>
+<li>Error states with red borders</li>
+<li>Success states with green borders</li>
+</ul>
+<h3>Toggle Switches</h3>
+<ul>
+<li><strong>Off State</strong>: Gray background</li>
+<li><strong>On State</strong>: Blue background with white circle</li>
+<li><strong>Animation</strong>: Smooth slide transition (300ms)</li>
+<li><strong>Size</strong>: Standard switch size across all pages</li>
+</ul>
+<h3>Progress Bars</h3>
+<ul>
+<li><strong>Height</strong>: 8px standard</li>
+<li><strong>Background</strong>: Muted theme color</li>
+<li><strong>Fill Color</strong>: Primary theme color</li>
+<li><strong>Animation</strong>: Smooth width transitions</li>
+</ul>
+<h3>Dropdown Menus</h3>
+<ul>
+<li><strong>Trigger</strong>: Button with down arrow</li>
+<li><strong>Panel</strong>: White/dark background with border</li>
+<li><strong>Shadow</strong>: Drop shadow for depth</li>
+<li><strong>Animation</strong>: Fade in from top</li>
+<li><strong>Max Height</strong>: Scrollable when many options</li>
+</ul>
+<h3>Badges</h3>
+<ul>
+<li><strong>Variants</strong>: Default, secondary, outline, destructive</li>
+<li><strong>Size</strong>: Small text with padding</li>
+<li><strong>Border Radius</strong>: Rounded corners</li>
+<li><strong>Colors</strong>: Match theme and status</li>
+</ul>
+<h3>Loading States</h3>
+<ul>
+<li><strong>Spinner</strong>: Rotating animation</li>
+<li><strong>Skeleton Loading</strong>: Placeholder content shapes</li>
+<li><strong>Progressive Loading</strong>: Content appears as it loads</li>
+</ul>
+<h3>Hover Effects</h3>
+<ul>
+<li><strong>Cards</strong>: Subtle shadow increase</li>
+<li><strong>Buttons</strong>: Background color lightening</li>
+<li><strong>Icons</strong>: Size or color transitions</li>
+<li><strong>Links</strong>: Underline appearance</li>
+</ul>
+<hr />
+<h2>Responsive Design Implementation</h2>
+<h3>Breakpoints</h3>
+<ul>
+<li><strong>Mobile</strong>: &lt; 768px</li>
+<li><strong>Tablet</strong>: 768px - 1024px</li>
+<li><strong>Desktop</strong>: &gt; 1024px</li>
+</ul>
+<h3>Mobile Adaptations</h3>
+<ul>
+<li><strong>Sidebar</strong>: Collapses to overlay/drawer</li>
+<li><strong>Grid Layouts</strong>: Single column stacking</li>
+<li><strong>Card Spacing</strong>: Reduced margins and padding</li>
+<li><strong>Font Sizes</strong>: Smaller text scales</li>
+<li><strong>Touch Targets</strong>: Minimum 44px touch areas</li>
+</ul>
+<h3>Tablet Adaptations</h3>
+<ul>
+<li><strong>Two-Column Layouts</strong>: Where appropriate</li>
+<li><strong>Sidebar</strong>: May remain fixed or collapse</li>
+<li><strong>Card Grid</strong>: 2-column grid layouts</li>
+<li><strong>Navigation</strong>: Tab scrolling if needed</li>
+</ul>
+<h3>Desktop Optimizations</h3>
+<ul>
+<li><strong>Full Layout</strong>: All components visible</li>
+<li><strong>Multi-Column Grids</strong>: 3-4 column layouts</li>
+<li><strong>Hover States</strong>: Full hover interactions</li>
+<li><strong>Keyboard Navigation</strong>: Focus indicators</li>
+</ul>
+<hr />
+<h2>Data Visualization Components</h2>
+<h3>Metrics Chart (Dashboard)</h3>
+<ul>
+<li><strong>Chart Type</strong>: Area Chart (Recharts library)</li>
+<li><strong>Data Lines</strong>: 2 overlapping areas</li>
+<li><strong>Colors</strong>: CSS custom properties (--chart-1, --chart-2)</li>
+<li><strong>Gradients</strong>: Linear gradients for fill areas</li>
+<li><strong>Grid</strong>: Cartesian grid with dashed lines</li>
+<li><strong>Axes</strong>: Time (X) and Values (Y)</li>
+<li><strong>Tooltip</strong>: Custom styled with theme colors</li>
+<li><strong>Height</strong>: 300px</li>
+<li><strong>Responsive</strong>: Full width container</li>
+</ul>
+<h3>Compliance Chart</h3>
+<ul>
+<li><strong>Chart Type</strong>: Not specified (referenced component)</li>
+<li><strong>Usage</strong>: Shows compliance trends over time</li>
+<li><strong>Integration</strong>: Part of compliance dashboard</li>
+</ul>
+<h3>System Metrics Chart</h3>
+<ul>
+<li><strong>Chart Type</strong>: Not specified (referenced component)</li>
+<li><strong>Usage</strong>: Performance trends over 24 hours</li>
+<li><strong>Integration</strong>: Part of monitoring page</li>
+</ul>
+<hr />
+<h2>Error Handling &amp; User Feedback</h2>
+<h3>Error States</h3>
+<ul>
+<li><strong>Alert Components</strong>: Destructive variant with icons</li>
+<li><strong>Error Messages</strong>: Clear, actionable text</li>
+<li><strong>Form Validation</strong>: Field-level error indicators</li>
+<li><strong>Network Errors</strong>: Specific error descriptions</li>
+<li><strong>Fallback UI</strong>: Graceful degradation</li>
+</ul>
+<h3>Success States</h3>
+<ul>
+<li><strong>Toast Notifications</strong>: Success confirmations</li>
+<li><strong>Progress Indicators</strong>: Task completion feedback</li>
+<li><strong>Status Badges</strong>: Visual status communication</li>
+<li><strong>Check Icons</strong>: Success state indicators</li>
+</ul>
+<h3>Loading States</h3>
+<ul>
+<li><strong>Skeleton Screens</strong>: Content placeholders</li>
+<li><strong>Spinners</strong>: Operation in progress</li>
+<li><strong>Progress Bars</strong>: Task completion percentage</li>
+<li><strong>Disabled States</strong>: Preventing further actions</li>
+</ul>
+<hr />
+<h2>Accessibility Features</h2>
+<h3>Keyboard Navigation</h3>
+<ul>
+<li><strong>Tab Order</strong>: Logical focus flow</li>
+<li><strong>Focus Indicators</strong>: Visible focus rings</li>
+<li><strong>Keyboard Shortcuts</strong>: Standard interactions</li>
+<li><strong>Skip Links</strong>: Navigation bypass options</li>
+</ul>
+<h3>Screen Reader Support</h3>
+<ul>
+<li><strong>ARIA Labels</strong>: Descriptive element labels</li>
+<li><strong>Role Attributes</strong>: Semantic element roles</li>
+<li><strong>Live Regions</strong>: Dynamic content updates</li>
+<li><strong>Alternative Text</strong>: Image descriptions</li>
+</ul>
+<h3>Visual Accessibility</h3>
+<ul>
+<li><strong>Color Contrast</strong>: WCAG AA compliance</li>
+<li><strong>Text Sizing</strong>: Scalable font sizes</li>
+<li><strong>Color Independence</strong>: Not color-only communication</li>
+<li><strong>Motion Control</strong>: Reduced motion preferences</li>
+</ul>
+<hr />
+<h2>Performance Considerations</h2>
+<h3>Code Splitting</h3>
+<ul>
+<li><strong>Page Level</strong>: Next.js automatic splitting</li>
+<li><strong>Component Level</strong>: Dynamic imports where needed</li>
+<li><strong>Route Based</strong>: Separate bundles per route</li>
+</ul>
+<h3>Image Optimization</h3>
+<ul>
+<li><strong>Next.js Image</strong>: Optimized image component</li>
+<li><strong>Lazy Loading</strong>: Images load on demand</li>
+<li><strong>Format Selection</strong>: WebP when supported</li>
+<li><strong>Size Optimization</strong>: Multiple size variants</li>
+</ul>
+<h3>Caching Strategies</h3>
+<ul>
+<li><strong>Static Assets</strong>: Long-term caching</li>
+<li><strong>API Responses</strong>: Appropriate cache headers</li>
+<li><strong>Client Storage</strong>: localStorage for settings</li>
+<li><strong>Service Worker</strong>: Offline capabilities</li>
+</ul>
+<h3>Bundle Optimization</h3>
+<ul>
+<li><strong>Tree Shaking</strong>: Unused code elimination</li>
+<li><strong>Minification</strong>: Production code compression</li>
+<li><strong>Compression</strong>: Gzip/Brotli compression</li>
+<li><strong>Critical CSS</strong>: Above-fold styling priority</li>
+</ul>
+<hr />
+<h2>Development &amp; Deployment</h2>
+<h3>Technology Stack</h3>
+<ul>
+<li><strong>Framework</strong>: Next.js 15.2.4</li>
+<li><strong>Language</strong>: TypeScript</li>
+<li><strong>Styling</strong>: Tailwind CSS</li>
+<li><strong>Components</strong>: Radix UI primitives</li>
+<li><strong>Icons</strong>: Lucide React</li>
+<li><strong>Charts</strong>: Recharts</li>
+<li><strong>State</strong>: React hooks + context</li>
+<li><strong>Build</strong>: Next.js build system</li>
+</ul>
+<h3>Development Tools</h3>
+<ul>
+<li><strong>Type Checking</strong>: TypeScript compiler</li>
+<li><strong>Code Formatting</strong>: Built-in formatting</li>
+<li><strong>Hot Reload</strong>: Next.js fast refresh</li>
+<li><strong>Dev Server</strong>: Next.js development server</li>
+</ul>
+<h3>Production Deployment</h3>
+<ul>
+<li><strong>Build Output</strong>: Static/server hybrid</li>
+<li><strong>Environment</strong>: Vercel Analytics integration</li>
+<li><strong>Performance</strong>: Built-in optimizations</li>
+<li><strong>Monitoring</strong>: Real-time error tracking</li>
+</ul>
+<hr />
+<p>This comprehensive UX analysis covers every button, tab, card, graph, form field, navigation element, theme variation, and interactive component in the AI De-identification System. The design implements modern enterprise UI/UX patterns with careful attention to user experience, accessibility, and performance across all device types and user scenarios.</p>
+</body>
+</html>

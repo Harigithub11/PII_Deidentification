@@ -1,0 +1,109 @@
+CONFIDENTIAL FINANCIAL SERVICES DOCUMENT
+
+========================================
+PREMIER BANK CUSTOMER PROFILE
+========================================
+
+CUSTOMER INFORMATION:
+Full Name: Alexander Benjamin Rodriguez
+Date of Birth: July 22, 1982
+Social Security Number: 456-78-9123
+Customer ID: CUST-2024-7891
+Account Opened: January 15, 2020
+
+CONTACT INFORMATION:
+Primary Address: 8934 Financial District Blvd, Suite 1205, New York, NY 10004
+Phone: (212) 555-8934
+Mobile: +1-212-555-7462
+Email: alex.rodriguez@financetech.com
+Work Phone: (212) 555-WORK
+
+BANKING INFORMATION:
+Primary Checking Account: 8847291054637829
+Routing Number: 021000021
+Account Type: Premium Business Checking
+Current Balance: $125,847.32
+
+Savings Account Number: 8847291054637845  
+Routing Number: 021000021
+Account Type: High-Yield Savings
+Current Balance: $487,291.67
+
+CREDIT INFORMATION:
+Credit Card Number: 4532 8947 2918 5476
+Expiration Date: 12/26
+CVV: 847
+Credit Limit: $25,000.00
+Current Balance: $3,847.92
+
+Business Credit Card: 5412 7536 8492 1847
+Expiration Date: 08/25
+Available Credit: $47,500.00
+
+LOAN INFORMATION:
+Mortgage Account: MORT-8847291
+Principal Balance: $485,726.43
+Monthly Payment: $2,847.92
+Property Address: 245 Residential Ave, Brooklyn, NY 11201
+
+Auto Loan Account: AUTO-7291847
+Vehicle: 2023 Tesla Model S
+VIN: 5YJ3E1EA5NF012847
+Remaining Balance: $58,472.91
+
+INVESTMENT PORTFOLIO:
+Brokerage Account: BROK-847291054
+Portfolio Value: $1,247,829.35
+Investment Advisor: Sarah Mitchell, CFA
+Advisor Phone: (212) 555-INVEST
+
+401k Account: RTR-847291054
+Current Balance: $89,472.84
+Employer: TechCorp Financial Solutions
+EIN: 12-3456789
+
+CRYPTOCURRENCY HOLDINGS:
+Bitcoin Wallet: 1BvBMSEYstWetqTFn5Au4m4GFg7xJaNVN2
+Current Holdings: 2.8475 BTC
+Ethereum Address: 0x742d35Cc6634C0532925a3b8D4cFEDb18A8D9E4B
+Current Holdings: 15.847 ETH
+
+WIRE TRANSFER INFORMATION:
+SWIFT Code: PREMIUS33XXX
+International Account: 1847291054637829847
+ABA Routing: 021000021
+Correspondent Bank: Deutsche Bank AG, Frankfurt
+
+RECENT TRANSACTIONS:
+- ACH Transfer: $5,000.00 to Account 7291847532946 (09/15/2024)
+- Wire Transfer: $12,500.00 from Account DE89370400440532013000 (09/10/2024)
+- Credit Card Payment: $2,847.92 (09/05/2024)
+
+TAX INFORMATION:
+Tax ID (SSN): 456-78-9123
+Previous Year Income: $187,429.65
+Tax Advisor: Johnson & Associates CPA
+Advisor EIN: 98-7654321
+Contact: (212) 555-TAXES
+
+RISK ASSESSMENT:
+Credit Score: 785 (Excellent)
+Risk Rating: Low
+Account Status: Good Standing
+KYC Status: Verified
+AML Status: Clear
+
+COMPLIANCE NOTES:
+- FATCA Reporting: Compliant
+- CRS Reporting: Not Applicable (US Resident)
+- OFAC Check: Clear (Last updated: 09/01/2024)
+- PEP Status: Not a Politically Exposed Person
+
+Bank Officer: Jennifer Chen, VP
+Employee ID: EMP-7291
+Contact: (212) 555-7291 ext. 847
+License: NY Banking License #847291
+
+========================================
+END OF FINANCIAL DOCUMENT
+========================================
